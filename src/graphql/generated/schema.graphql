@@ -1,0 +1,82 @@
+input ChangePasswordInput {
+  currentPassword: String!
+  password: String!
+  repeatPassword: String
+}
+
+"""
+Date with time (isoformat)
+"""
+scalar DateTime
+
+input GetUploadUrlInput {
+  contentType: String!
+  filename: String!
+  private: Boolean!
+}
+
+input LoginInput {
+  email: String!
+  password: String!
+}
+
+type MediaUploadUrlType {
+  contentType: String!
+  retrieveUrl: String!
+  uploadUrl: String!
+}
+
+type Mutation {
+  changePassword(input: ChangePasswordInput!): Boolean!
+  getUploadUrl(input: GetUploadUrlInput!): MediaUploadUrlType!
+  login(input: LoginInput!): UserTypeWeb!
+  register(input: RegisterInput!): UserType!
+  requestResetPassword(input: RequestResetPasswordInput!): Boolean!
+  resetPassword(input: ResetPasswordInput!): Boolean!
+  user(input: ProfileInput!): UserType!
+}
+
+input ProfileInput {
+  firstName: String!
+  lastName: String!
+}
+
+type Query {
+  me: UserType!
+}
+
+input RegisterInput {
+  email: String!
+  firstName: String!
+  lastName: String!
+  password: String!
+  publicName: String!
+}
+
+input RequestResetPasswordInput {
+  email: String!
+}
+
+input ResetPasswordInput {
+  password: String!
+  repeatPassword: String
+  token: String!
+}
+
+scalar UUID
+
+type UserType {
+  created: DateTime!
+  email: String!
+  firstName: String!
+  id: UUID!
+  lastName: String!
+  publicName: String!
+  token: String!
+}
+
+type UserTypeWeb {
+  refreshToken: String!
+  token: String!
+  user: UserType!
+}
