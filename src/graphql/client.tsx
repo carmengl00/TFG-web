@@ -11,7 +11,6 @@ import { PropsWithChildren } from 'react';
 
 import instrospection from './generated/introspection';
 
-// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-call
 export const link = createHttpLink({
   uri: process.env['NEXT_PUBLIC_GRAPHQL_ENDPOINT'],
   credentials: 'include',
@@ -21,7 +20,6 @@ export default function setupClient() {
   const errorLink = onError(({ graphQLErrors }) => {
     if (graphQLErrors) {
       for (const err of graphQLErrors) {
-        // eslint-disable-next-line no-console
         console.error(err.message);
       }
     }
