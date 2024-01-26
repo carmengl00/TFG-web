@@ -1,9 +1,9 @@
 export interface PossibleTypesResultData {
-  possibleTypes: {
-    [key: string]: string[];
-  };
+	possibleTypes: {
+		[key: string]: string[];
+	};
 }
 const result: PossibleTypesResultData = {
-  possibleTypes: {},
+	possibleTypes: {},
 };
 export default result;

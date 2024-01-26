@@ -1,15 +1,15 @@
-import { Inter } from 'next/font/google'
+import { Inter } from 'next/font/google';
 
-const inter = Inter({ subsets: ['latin'] })
+const inter = Inter({ subsets: ['latin'] });
 
 export default function RootLayout({
-  children,
+	children,
 }: {
-  children: React.ReactNode
+	children: React.ReactNode;
 }) {
-  return (
-    <main className='h-screen flex flex-col items-center justify-center max-w-md mx-auto'>
-        {children}
-    </main>
-  )
+	return (
+		<main className="h-screen flex flex-col items-center justify-center max-w-md mx-auto">
+			{children}
+		</main>
+	);
 }

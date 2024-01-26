@@ -1,5 +1,5 @@
 import type { CodegenConfig } from '@graphql-codegen/cli';
- 
+
 const config: CodegenConfig = {
 	schema: [
 		`${process.env.NEXT_PUBLIC_GRAPHQL_ENDPOINT ?? ''}`,
@@ -8,11 +8,7 @@ const config: CodegenConfig = {
 	documents: ['src/graphql/**/*.graphql'],
 	generates: {
 		'./src/graphql/generated/types.ts': {
-			plugins: [
-				'typescript',
-				'typescript-operations',
-				'typed-document-node',
-			],
+			plugins: ['typescript', 'typescript-operations', 'typed-document-node'],
 			config: {
 				scalars: {
 					Date: 'string',
@@ -39,5 +35,5 @@ const config: CodegenConfig = {
 		afterAllFileWrite: 'prettier --write',
 	},
 };
- 
+
 export default config;
