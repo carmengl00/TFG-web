@@ -13,7 +13,11 @@ import { Separator } from '../ui/separator';
 import { TooltipProvider } from '../ui/tooltip';
 import { Nav } from './components';
 
-const Menu = () => {
+interface MenuProps {
+	resourcesNumber: number;
+}
+
+const Menu = ({ resourcesNumber }: MenuProps) => {
 	return (
 		<TooltipProvider delayDuration={0}>
 			<div className={cn('max-w-[350px]')}>
@@ -44,7 +48,7 @@ const Menu = () => {
 					links={[
 						{
 							title: 'Mis recursos',
-							label: '5',
+							label: String(resourcesNumber),
 							icon: Rocket,
 							variant: 'default',
 							href: paths.public.home,

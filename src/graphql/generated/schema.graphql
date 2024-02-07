@@ -5,9 +5,28 @@ input ChangePasswordInput {
 }
 
 """
+Date (isoformat)
+"""
+scalar Date
+
+"""
 Date with time (isoformat)
 """
 scalar DateTime
+
+input DayAvailabilityInput {
+  day: Date!
+  endTime: Time!
+  startTime: Time!
+}
+
+type DayAvailabilityType {
+  day: Date!
+  endTime: Time!
+  id: UUID!
+  resource: ResourceType!
+  startTime: Time!
+}
 
 input GetUploadUrlInput {
   contentType: String!
@@ -28,12 +47,71 @@ type MediaUploadUrlType {
 
 type Mutation {
   changePassword(input: ChangePasswordInput!): Boolean!
+
+  """
+  Creates a day availability
+  """
+  createDayAvailability(
+    input: DayAvailabilityInput!
+    resourceId: UUID!
+  ): DayAvailabilityType!
+
+  """
+  Creates a resource
+  """
+  createResource(input: ResourceInput!): ResourceType!
+
+  """
+  Delete a day availability
+  """
+  deleteDayAvailability(id: UUID!): Boolean!
+
+  """
+  Delete your resource
+  """
+  deleteResource(id: UUID!): Boolean!
   getUploadUrl(input: GetUploadUrlInput!): MediaUploadUrlType!
   login(input: LoginInput!): UserTypeWeb!
+  logout: Boolean!
   register(input: RegisterInput!): UserType!
   requestResetPassword(input: RequestResetPasswordInput!): Boolean!
   resetPassword(input: ResetPasswordInput!): Boolean!
+
+  """
+  Updates a day availability
+  """
+  updateDayAvailability(
+    input: UpdateDayAvailabilityInput!
+  ): DayAvailabilityType!
+
+  """
+  Updates a resource
+  """
+  updateResource(input: UpdateResourceInput!): ResourceType!
   user(input: ProfileInput!): UserType!
+}
+
+type PageInfoType {
+  hasNext: Boolean!
+  hasPrev: Boolean!
+  page: Int!
+  pages: Int!
+  totalResults: Int!
+}
+
+type PaginatedDayAvailabilityType {
+  edges: [DayAvailabilityType!]!
+  pageInfo: PageInfoType!
+}
+
+type PaginatedResourceType {
+  edges: [ResourceType!]!
+  pageInfo: PageInfoType!
+}
+
+input PaginationInput {
+  page: Int
+  pageSize: Int
 }
 
 input ProfileInput {
@@ -43,6 +121,18 @@ input ProfileInput {
 
 type Query {
   me: UserType!
+
+  """
+  Returns a list of your daily availabilities.
+  """
+  myDailyAvailability(
+    pagination: PaginationInput = null
+  ): PaginatedDayAvailabilityType!
+
+  """
+  Returns a list of your resources.
+  """
+  myResources(pagination: PaginationInput = null): PaginatedResourceType!
 }
 
 input RegisterInput {
@@ -63,7 +153,48 @@ input ResetPasswordInput {
   token: String!
 }
 
+input ResourceInput {
+  availableTime: Int!
+  description: String!
+  endDate: Date!
+  location: String
+  name: String!
+  startDate: Date!
+}
+
+type ResourceType {
+  availableTime: Int!
+  description: String!
+  endDate: Date!
+  id: UUID!
+  location: String
+  name: String!
+  startDate: Date!
+  user: UserType!
+}
+
+"""
+Time (isoformat)
+"""
+scalar Time
+
 scalar UUID
+
+input UpdateDayAvailabilityInput {
+  dayAvailabilityId: UUID!
+  endTime: Time!
+  startTime: Time!
+}
+
+input UpdateResourceInput {
+  availableTime: Int
+  description: String
+  endDate: Date
+  location: String
+  name: String
+  resourceId: UUID!
+  startDate: Date
+}
 
 type UserType {
   created: DateTime!

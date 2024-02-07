@@ -6,7 +6,7 @@ import {
 	REFRESH_TOKEN_EXPIRES,
 	REFRESH_TOKEN_KEY,
 } from './constants';
-import { StoreTokens } from './types';
+import { GetTokens, StoreTokens } from './types';
 
 const cookies = new Cookies();
 
@@ -38,4 +38,25 @@ export function resetTokens() {
 	cookies.remove(REFRESH_TOKEN_KEY, { path: '/' });
 
 	updateAuthVar({ init: true, tokens: undefined });
+}
+
+export function getTokens(): GetTokens {
+	const { tokens } = authVar();
+	let { accessToken, refreshToken } = tokens || {};
+	if (!accessToken) {
+		accessToken = cookies.get<string>(ACCESS_TOKEN_KEY);
+	}
+	if (!refreshToken) {
+		refreshToken = cookies.get<string>(REFRESH_TOKEN_KEY);
+	}
+	updateAuthVar({ tokens: { accessToken, refreshToken } });
+
+	return { accessToken, refreshToken };
+}
+
+export function getStoredTokens(): GetTokens {
+	return {
+		accessToken: cookies.get<string>(ACCESS_TOKEN_KEY),
+		refreshToken: cookies.get<string>(REFRESH_TOKEN_KEY),
+	};
 }

@@ -1,4 +1,4 @@
-import { ApolloClientProvider } from '@/graphql/client';
+import { ApolloClientProvider } from '@/graphql/client/client';
 import type { NextPage } from 'next';
 import type { AppProps } from 'next/app';
 import type { ReactElement, ReactNode } from 'react';

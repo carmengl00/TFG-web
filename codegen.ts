@@ -13,6 +13,7 @@ const config: CodegenConfig = {
 				scalars: {
 					Date: 'string',
 					DateTime: 'string',
+					Time: 'string',
 					GenericScalar: 'unknown',
 					Upload: 'unknown',
 					UUID: 'string',

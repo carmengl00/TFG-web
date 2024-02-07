@@ -26,7 +26,9 @@ export type Scalars = {
 	Boolean: { input: boolean; output: boolean };
 	Int: { input: number; output: number };
 	Float: { input: number; output: number };
+	Date: { input: string; output: string };
 	DateTime: { input: string; output: string };
+	Time: { input: string; output: string };
 	UUID: { input: string; output: string };
 };
 
@@ -34,6 +36,20 @@ export type ChangePasswordInput = {
 	currentPassword: Scalars['String']['input'];
 	password: Scalars['String']['input'];
 	repeatPassword?: InputMaybe<Scalars['String']['input']>;
+};
+
+export type DayAvailabilityInput = {
+	day: Scalars['Date']['input'];
+	endTime: Scalars['Time']['input'];
+	startTime: Scalars['Time']['input'];
+};
+
+export type DayAvailabilityType = {
+	day: Scalars['Date']['output'];
+	endTime: Scalars['Time']['output'];
+	id: Scalars['UUID']['output'];
+	resource: ResourceType;
+	startTime: Scalars['Time']['output'];
 };
 
 export type GetUploadUrlInput = {
@@ -55,16 +71,46 @@ export type MediaUploadUrlType = {
 
 export type Mutation = {
 	changePassword: Scalars['Boolean']['output'];
+	/** Creates a day availability */
+	createDayAvailability: DayAvailabilityType;
+	/** Creates a resource */
+	createResource: ResourceType;
+	/** Delete a day availability */
+	deleteDayAvailability: Scalars['Boolean']['output'];
+	/** Delete your resource */
+	deleteResource: Scalars['Boolean']['output'];
 	getUploadUrl: MediaUploadUrlType;
 	login: UserTypeWeb;
+	logout: Scalars['Boolean']['output'];
 	register: UserType;
 	requestResetPassword: Scalars['Boolean']['output'];
 	resetPassword: Scalars['Boolean']['output'];
+	/** Updates a day availability */
+	updateDayAvailability: DayAvailabilityType;
+	/** Updates a resource */
+	updateResource: ResourceType;
 	user: UserType;
 };
 
 export type MutationChangePasswordArgs = {
 	input: ChangePasswordInput;
+};
+
+export type MutationCreateDayAvailabilityArgs = {
+	input: DayAvailabilityInput;
+	resourceId: Scalars['UUID']['input'];
+};
+
+export type MutationCreateResourceArgs = {
+	input: ResourceInput;
+};
+
+export type MutationDeleteDayAvailabilityArgs = {
+	id: Scalars['UUID']['input'];
+};
+
+export type MutationDeleteResourceArgs = {
+	id: Scalars['UUID']['input'];
 };
 
 export type MutationGetUploadUrlArgs = {
@@ -87,8 +133,39 @@ export type MutationResetPasswordArgs = {
 	input: ResetPasswordInput;
 };
 
+export type MutationUpdateDayAvailabilityArgs = {
+	input: UpdateDayAvailabilityInput;
+};
+
+export type MutationUpdateResourceArgs = {
+	input: UpdateResourceInput;
+};
+
 export type MutationUserArgs = {
 	input: ProfileInput;
+};
+
+export type PageInfoType = {
+	hasNext: Scalars['Boolean']['output'];
+	hasPrev: Scalars['Boolean']['output'];
+	page: Scalars['Int']['output'];
+	pages: Scalars['Int']['output'];
+	totalResults: Scalars['Int']['output'];
+};
+
+export type PaginatedDayAvailabilityType = {
+	edges: Array<DayAvailabilityType>;
+	pageInfo: PageInfoType;
+};
+
+export type PaginatedResourceType = {
+	edges: Array<ResourceType>;
+	pageInfo: PageInfoType;
+};
+
+export type PaginationInput = {
+	page?: InputMaybe<Scalars['Int']['input']>;
+	pageSize?: InputMaybe<Scalars['Int']['input']>;
 };
 
 export type ProfileInput = {
@@ -98,6 +175,18 @@ export type ProfileInput = {
 
 export type Query = {
 	me: UserType;
+	/** Returns a list of your daily availabilities. */
+	myDailyAvailability: PaginatedDayAvailabilityType;
+	/** Returns a list of your resources. */
+	myResources: PaginatedResourceType;
+};
+
+export type QueryMyDailyAvailabilityArgs = {
+	pagination?: InputMaybe<PaginationInput>;
+};
+
+export type QueryMyResourcesArgs = {
+	pagination?: InputMaybe<PaginationInput>;
 };
 
 export type RegisterInput = {
@@ -116,6 +205,42 @@ export type ResetPasswordInput = {
 	password: Scalars['String']['input'];
 	repeatPassword?: InputMaybe<Scalars['String']['input']>;
 	token: Scalars['String']['input'];
+};
+
+export type ResourceInput = {
+	availableTime: Scalars['Int']['input'];
+	description: Scalars['String']['input'];
+	endDate: Scalars['Date']['input'];
+	location?: InputMaybe<Scalars['String']['input']>;
+	name: Scalars['String']['input'];
+	startDate: Scalars['Date']['input'];
+};
+
+export type ResourceType = {
+	availableTime: Scalars['Int']['output'];
+	description: Scalars['String']['output'];
+	endDate: Scalars['Date']['output'];
+	id: Scalars['UUID']['output'];
+	location?: Maybe<Scalars['String']['output']>;
+	name: Scalars['String']['output'];
+	startDate: Scalars['Date']['output'];
+	user: UserType;
+};
+
+export type UpdateDayAvailabilityInput = {
+	dayAvailabilityId: Scalars['UUID']['input'];
+	endTime: Scalars['Time']['input'];
+	startTime: Scalars['Time']['input'];
+};
+
+export type UpdateResourceInput = {
+	availableTime?: InputMaybe<Scalars['Int']['input']>;
+	description?: InputMaybe<Scalars['String']['input']>;
+	endDate?: InputMaybe<Scalars['Date']['input']>;
+	location?: InputMaybe<Scalars['String']['input']>;
+	name?: InputMaybe<Scalars['String']['input']>;
+	resourceId: Scalars['UUID']['input'];
+	startDate?: InputMaybe<Scalars['Date']['input']>;
 };
 
 export type UserType = {
@@ -165,6 +290,45 @@ export type RegisterMutation = {
 		lastName: string;
 		email: string;
 		publicName: string;
+	};
+};
+
+export type GetMeQueryVariables = Exact<{ [key: string]: never }>;
+
+export type GetMeQuery = {
+	me: {
+		id: string;
+		firstName: string;
+		lastName: string;
+		email: string;
+		publicName: string;
+		created: string;
+		token: string;
+	};
+};
+
+export type MyResourcesQueryVariables = Exact<{
+	pagination?: InputMaybe<PaginationInput>;
+}>;
+
+export type MyResourcesQuery = {
+	myResources: {
+		pageInfo: {
+			page: number;
+			pages: number;
+			totalResults: number;
+			hasNext: boolean;
+		};
+		edges: Array<{
+			id: string;
+			name: string;
+			description: string;
+			availableTime: number;
+			startDate: string;
+			endDate: string;
+			location?: string | undefined;
+			user: { email: string };
+		}>;
 	};
 };
 
@@ -306,3 +470,144 @@ export const RegisterDocument = {
 		},
 	],
 } as unknown as DocumentNode<RegisterMutation, RegisterMutationVariables>;
+export const GetMeDocument = {
+	kind: 'Document',
+	definitions: [
+		{
+			kind: 'OperationDefinition',
+			operation: 'query',
+			name: { kind: 'Name', value: 'getMe' },
+			selectionSet: {
+				kind: 'SelectionSet',
+				selections: [
+					{
+						kind: 'Field',
+						name: { kind: 'Name', value: 'me' },
+						selectionSet: {
+							kind: 'SelectionSet',
+							selections: [
+								{ kind: 'Field', name: { kind: 'Name', value: 'id' } },
+								{ kind: 'Field', name: { kind: 'Name', value: 'firstName' } },
+								{ kind: 'Field', name: { kind: 'Name', value: 'lastName' } },
+								{ kind: 'Field', name: { kind: 'Name', value: 'email' } },
+								{ kind: 'Field', name: { kind: 'Name', value: 'publicName' } },
+								{ kind: 'Field', name: { kind: 'Name', value: 'created' } },
+								{ kind: 'Field', name: { kind: 'Name', value: 'token' } },
+							],
+						},
+					},
+				],
+			},
+		},
+	],
+} as unknown as DocumentNode<GetMeQuery, GetMeQueryVariables>;
+export const MyResourcesDocument = {
+	kind: 'Document',
+	definitions: [
+		{
+			kind: 'OperationDefinition',
+			operation: 'query',
+			name: { kind: 'Name', value: 'myResources' },
+			variableDefinitions: [
+				{
+					kind: 'VariableDefinition',
+					variable: {
+						kind: 'Variable',
+						name: { kind: 'Name', value: 'pagination' },
+					},
+					type: {
+						kind: 'NamedType',
+						name: { kind: 'Name', value: 'PaginationInput' },
+					},
+				},
+			],
+			selectionSet: {
+				kind: 'SelectionSet',
+				selections: [
+					{
+						kind: 'Field',
+						name: { kind: 'Name', value: 'myResources' },
+						arguments: [
+							{
+								kind: 'Argument',
+								name: { kind: 'Name', value: 'pagination' },
+								value: {
+									kind: 'Variable',
+									name: { kind: 'Name', value: 'pagination' },
+								},
+							},
+						],
+						selectionSet: {
+							kind: 'SelectionSet',
+							selections: [
+								{
+									kind: 'Field',
+									name: { kind: 'Name', value: 'pageInfo' },
+									selectionSet: {
+										kind: 'SelectionSet',
+										selections: [
+											{ kind: 'Field', name: { kind: 'Name', value: 'page' } },
+											{ kind: 'Field', name: { kind: 'Name', value: 'pages' } },
+											{
+												kind: 'Field',
+												name: { kind: 'Name', value: 'totalResults' },
+											},
+											{
+												kind: 'Field',
+												name: { kind: 'Name', value: 'hasNext' },
+											},
+										],
+									},
+								},
+								{
+									kind: 'Field',
+									name: { kind: 'Name', value: 'edges' },
+									selectionSet: {
+										kind: 'SelectionSet',
+										selections: [
+											{ kind: 'Field', name: { kind: 'Name', value: 'id' } },
+											{ kind: 'Field', name: { kind: 'Name', value: 'name' } },
+											{
+												kind: 'Field',
+												name: { kind: 'Name', value: 'description' },
+											},
+											{
+												kind: 'Field',
+												name: { kind: 'Name', value: 'availableTime' },
+											},
+											{
+												kind: 'Field',
+												name: { kind: 'Name', value: 'startDate' },
+											},
+											{
+												kind: 'Field',
+												name: { kind: 'Name', value: 'endDate' },
+											},
+											{
+												kind: 'Field',
+												name: { kind: 'Name', value: 'location' },
+											},
+											{
+												kind: 'Field',
+												name: { kind: 'Name', value: 'user' },
+												selectionSet: {
+													kind: 'SelectionSet',
+													selections: [
+														{
+															kind: 'Field',
+															name: { kind: 'Name', value: 'email' },
+														},
+													],
+												},
+											},
+										],
+									},
+								},
+							],
+						},
+					},
+				],
+			},
+		},
+	],
+} as unknown as DocumentNode<MyResourcesQuery, MyResourcesQueryVariables>;
