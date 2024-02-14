@@ -11,7 +11,7 @@ export function MyResourcesView() {
 	return (
 		<>
 			<div className="flex flex-row w-full h-full">
-				<div className="w-[350px]">
+				<div className="w-3/12">
 					<Menu
 						resourcesNumber={
 							resources.pageInfo ? resources.pageInfo.totalResults || 0 : 0
@@ -23,6 +23,7 @@ export function MyResourcesView() {
 					{resources.edges.map((resource) => (
 						<CustomCard
 							key={resource.id}
+							id={resource.id}
 							title={resource.name}
 							startDate={new Date(resource.startDate)}
 							endDate={new Date(resource.endDate)}

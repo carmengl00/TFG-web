@@ -45,6 +45,11 @@ type MediaUploadUrlType {
   uploadUrl: String!
 }
 
+input MonthInput {
+  month: Int!
+  year: Int!
+}
+
 type Mutation {
   changePassword(input: ChangePasswordInput!): Boolean!
 
@@ -126,6 +131,7 @@ type Query {
   Returns a list of your daily availabilities.
   """
   myDailyAvailability(
+    input: MonthInput!
     pagination: PaginationInput = null
   ): PaginatedDayAvailabilityType!
 

@@ -1,3 +1,4 @@
+import { useResourceActions } from '@/graphql/hooks/myResources/useResourceActions';
 import {
 	CalendarDays,
 	ChevronDownIcon,
@@ -23,6 +24,7 @@ import {
 } from '../ui/dropdown-menu';
 
 interface CustomCardProps {
+	id: string;
 	title: string;
 	startDate: Date;
 	endDate: Date;
@@ -30,6 +32,7 @@ interface CustomCardProps {
 }
 
 const CustomCard = ({
+	id,
 	title,
 	startDate,
 	endDate,
@@ -44,6 +47,9 @@ const CustomCard = ({
 		'es-ES',
 		{ month: 'long' }
 	)} de ${endDate.getFullYear()}`;
+
+	const deleteResource = useResourceActions();
+
 	return (
 		<div className="mt-10">
 			<Card className="w-11/12 ml-5">
@@ -80,16 +86,9 @@ const CustomCard = ({
 								className="w-[200px]"
 								forceMount
 							>
-								<DropdownMenuGroup>
-									<DropdownMenuItem>
-										<Settings className="mr-2 h-4 w-4" />
-										<span>Editar</span>
-									</DropdownMenuItem>
-									<DropdownMenuItem>
-										<Trash2 className="mr-2 h-4 w-4" />
-										<span>Eliminar</span>
-									</DropdownMenuItem>
-								</DropdownMenuGroup>
+								<DropdownMenuItem onClick={() => deleteResource(id)}>
+									Eliminar
+								</DropdownMenuItem>
 							</DropdownMenuContent>
 						</DropdownMenu>
 					</div>

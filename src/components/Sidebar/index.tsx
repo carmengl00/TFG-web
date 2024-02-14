@@ -20,7 +20,7 @@ interface MenuProps {
 const Menu = ({ resourcesNumber }: MenuProps) => {
 	return (
 		<TooltipProvider delayDuration={0}>
-			<div className={cn('max-w-[350px]')}>
+			<div className={cn('max-w-screen-sm')}>
 				<div
 					className={cn('flex h-[52px] items-center justify-center', 'px-2')}
 				>
