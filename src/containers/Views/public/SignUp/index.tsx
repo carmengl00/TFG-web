@@ -56,7 +56,7 @@ export function SignUpView() {
 				publicName: values.public_name,
 			});
 
-			if (!response) await push(paths.public.home);
+			if (response) await push(paths.public.signIn);
 		} catch (error) {
 			console.error('Error en la solicitud al backend:', error);
 		}

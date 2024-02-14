@@ -48,7 +48,7 @@ const CustomCard = ({
 		{ month: 'long' }
 	)} de ${endDate.getFullYear()}`;
 
-	const deleteResource = useResourceActions();
+	const { deleteResource } = useResourceActions();
 
 	return (
 		<div className="mt-10">

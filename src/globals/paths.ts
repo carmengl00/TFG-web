@@ -4,4 +4,5 @@ export const paths = {
 		signUp: '/register',
 		home: '/',
 	},
+	newResource: '/resource/new',
 };

@@ -8,6 +8,7 @@ import {
 	Rocket,
 	User,
 } from 'lucide-react';
+import { useRouter } from 'next/router';
 import React from 'react';
 import { Separator } from '../ui/separator';
 import { TooltipProvider } from '../ui/tooltip';
@@ -18,6 +19,15 @@ interface MenuProps {
 }
 
 const Menu = ({ resourcesNumber }: MenuProps) => {
+	const router = useRouter();
+
+	const getLinkVariant = (path: string) => {
+		if (router.pathname === path) {
+			return 'default';
+		}
+		return 'ghost';
+	};
+
 	return (
 		<TooltipProvider delayDuration={0}>
 			<div className={cn('max-w-screen-sm')}>
@@ -30,16 +40,24 @@ const Menu = ({ resourcesNumber }: MenuProps) => {
 				<Nav
 					links={[
 						{
-							title: 'Mi perfil',
-							icon: User,
-							variant: 'ghost',
+							title: 'Mis recursos',
+							label: String(resourcesNumber),
+							icon: Rocket,
+							variant: getLinkVariant(paths.public.home),
 							href: paths.public.home,
 						},
 						{
-							title: 'Ayuda',
-							icon: HelpCircle,
-							variant: 'ghost',
+							title: 'Próximos eventos',
+							label: '7',
+							icon: CalendarClock,
+							variant: getLinkVariant(paths.public.home),
 							href: paths.public.home,
+						},
+						{
+							title: 'Nuevo recurso',
+							icon: Plus,
+							variant: getLinkVariant(paths.newResource),
+							href: paths.newResource,
 						},
 					]}
 				/>
@@ -47,23 +65,15 @@ const Menu = ({ resourcesNumber }: MenuProps) => {
 				<Nav
 					links={[
 						{
-							title: 'Mis recursos',
-							label: String(resourcesNumber),
-							icon: Rocket,
-							variant: 'default',
+							title: 'Mi perfil',
+							icon: User,
+							variant: getLinkVariant(paths.public.home),
 							href: paths.public.home,
 						},
 						{
-							title: 'Próximos eventos',
-							label: '7',
-							icon: CalendarClock,
-							variant: 'ghost',
-							href: paths.public.home,
-						},
-						{
-							title: 'Nuevo recurso',
-							icon: Plus,
-							variant: 'ghost',
+							title: 'Ayuda',
+							icon: HelpCircle,
+							variant: getLinkVariant(paths.public.home),
 							href: paths.public.home,
 						},
 					]}
@@ -74,7 +84,7 @@ const Menu = ({ resourcesNumber }: MenuProps) => {
 						{
 							title: 'Cerrar sesión',
 							icon: LogOutIcon,
-							variant: 'ghost',
+							variant: getLinkVariant(paths.public.home),
 							href: paths.public.home,
 						},
 					]}
