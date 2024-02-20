@@ -12,6 +12,7 @@
 		"biome:check": "biome check ./src",
 		"biome:format": "biome format ./src --write",
 		"biome:lint": "biome lint ./src",
+		"biome:apply": "biome check --apply ./src",
 		"postinstall": "husky install",
 		"prepare": "husky"
 	},
@@ -43,6 +44,7 @@
 		"@hookform/resolvers": "^3.3.3",
 		"@mui/material": "^5.15.4",
 		"@radix-ui/react-avatar": "^1.0.4",
+		"@radix-ui/react-checkbox": "^1.0.4",
 		"@radix-ui/react-dropdown-menu": "^2.0.6",
 		"@radix-ui/react-label": "^2.0.2",
 		"@radix-ui/react-popover": "^1.0.7",
