@@ -1,11 +1,12 @@
 import { paths } from '@/globals/paths';
 import { useAuthActions } from '@/graphql/auth/useAuthActions';
+import { isGraphqlMessageError } from '@/utils/isGraphqlMessageError';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useRouter } from 'next/router';
 import { useEffect, useMemo } from 'react';
 import { useForm } from 'react-hook-form';
 import { FormSchema, defaultValues } from './constants';
-import { FormValues, isGraphqlMessageError } from './types';
+import { FormValues } from './types';
 
 export const useConnect = () => {
 	const { handleLogin } = useAuthActions();

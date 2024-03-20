@@ -24,9 +24,11 @@ import {
 	SelectTrigger,
 	SelectValue,
 } from '@/components/ui/select';
+import { CalendarSelect } from '@/containers/Layout/CalendarSelect';
 import { CheckboxReactHookFormMultiple } from '@/containers/Layout/CheckboxReactHookFormMultiple';
 import { useResourceActions } from '@/graphql/hooks/myResources/useResourceActions';
 import { cn } from '@/lib/utils';
+import { isGraphqlMessageError } from '@/utils/isGraphqlMessageError';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { addDays, format } from 'date-fns';
 import { CalendarIcon } from 'lucide-react';
@@ -63,10 +65,16 @@ export function MyResourcesDetailsView() {
 	const { createResource } = useResourceActions();
 
 	const [showCheckbox, setShowCheckbox] = useState(false);
+	const [showThird, setShowThird] = useState(false);
+
+	const handleCheckboxButton = () => {
+		setShowCheckbox(false);
+		setShowThird(true);
+	};
 
 	const [resourceId, setResourceId] = useState<string>('');
-	const [startDate, setStartDate] = useState<Date | undefined>(undefined);
-	const [endDate, setEndDate] = useState<Date | undefined>(undefined);
+
+	const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
 	const onSubmit = async (data: z.infer<typeof FormSchema>) => {
 		if (data.time_measurement === 'hours') {
@@ -86,19 +94,38 @@ export function MyResourcesDetailsView() {
 			});
 			if (response?.id) {
 				setResourceId(response.id);
-				setStartDate(date?.from);
-				setEndDate(date?.to);
 				setShowCheckbox(true);
 			}
 		} catch (e) {
-			console.error('Error en la solicitud al backend:', e);
+			if (isGraphqlMessageError(e)) {
+				setErrorMessage(e.message);
+			}
 		}
 	};
 
 	return (
 		<>
 			<div className="flex flex-row w-full h-full">
-				{!showCheckbox ? (
+				{showThird ? (
+					<>
+						<div className="w-[350px]">
+							<Menu
+								resourcesNumber={
+									resources.pageInfo ? resources.pageInfo.totalResults || 0 : 0
+								}
+							/>
+						</div>
+						<div className="w-full">
+							<Header title="Crear nuevo recurso" />
+							{date?.from && date?.to && (
+								<CalendarSelect
+									resourceId={resourceId}
+									date={{ from: date.from, to: date.to }}
+								/>
+							)}
+						</div>
+					</>
+				) : !showCheckbox ? (
 					<>
 						<div className="w-[350px]">
 							<Menu
@@ -216,6 +243,11 @@ export function MyResourcesDetailsView() {
 
 										<div className="mt-10 mb-5">
 											<Button type="submit">Continuar</Button>
+											{errorMessage && (
+												<p className="mt-5 text-red-400">
+													Error: {errorMessage}
+												</p>
+											)}
 										</div>
 									</div>
 									<div className="w-2/5 ml-10">
@@ -280,11 +312,12 @@ export function MyResourcesDetailsView() {
 						</div>
 						<div className="w-full">
 							<Header title="Crear nuevo recurso" />
-							{startDate && endDate && (
+							{date?.from && date?.to && (
 								<CheckboxReactHookFormMultiple
 									resourceId={resourceId}
-									startDate={startDate}
-									endDate={endDate}
+									startDate={date.from}
+									endDate={date.to}
+									onButtonClick={handleCheckboxButton}
 								/>
 							)}
 						</div>

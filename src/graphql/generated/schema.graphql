@@ -4,6 +4,11 @@ input ChangePasswordInput {
   repeatPassword: String
 }
 
+input CreateOrUpdateAvailabilityInput {
+  items: [DayAvailabilityInput!]!
+  resourceId: UUID!
+}
+
 """
 Date (isoformat)
 """
@@ -14,10 +19,14 @@ Date with time (isoformat)
 """
 scalar DateTime
 
+type DayAvailabilityGroupType {
+  availabilities: [DayAvailabilityType!]!
+  day: Date!
+}
+
 input DayAvailabilityInput {
   day: Date!
-  endTime: Time!
-  startTime: Time!
+  timeRange: [TimeRangeInput!]!
 }
 
 type DayAvailabilityType {
@@ -47,6 +56,7 @@ type MediaUploadUrlType {
 
 input MonthInput {
   month: Int!
+  resourceId: UUID!
   year: Int!
 }
 
@@ -54,12 +64,9 @@ type Mutation {
   changePassword(input: ChangePasswordInput!): Boolean!
 
   """
-  Creates a day availability
+  Creates or updates day availability
   """
-  createDayAvailability(
-    input: DayAvailabilityInput!
-    resourceId: UUID!
-  ): DayAvailabilityType!
+  createOrUpdateAvailability(input: CreateOrUpdateAvailabilityInput!): Boolean!
 
   """
   Creates a resource
@@ -83,13 +90,6 @@ type Mutation {
   resetPassword(input: ResetPasswordInput!): Boolean!
 
   """
-  Updates a day availability
-  """
-  updateDayAvailability(
-    input: UpdateDayAvailabilityInput!
-  ): DayAvailabilityType!
-
-  """
   Updates a resource
   """
   updateResource(input: UpdateResourceInput!): ResourceType!
@@ -102,11 +102,6 @@ type PageInfoType {
   page: Int!
   pages: Int!
   totalResults: Int!
-}
-
-type PaginatedDayAvailabilityType {
-  edges: [DayAvailabilityType!]!
-  pageInfo: PageInfoType!
 }
 
 type PaginatedResourceType {
@@ -130,10 +125,7 @@ type Query {
   """
   Returns a list of your daily availabilities.
   """
-  myDailyAvailability(
-    input: MonthInput!
-    pagination: PaginationInput = null
-  ): PaginatedDayAvailabilityType!
+  myDailyAvailability(input: MonthInput!): [DayAvailabilityGroupType!]!
 
   """
   Returns a list of your resources.
@@ -184,13 +176,13 @@ Time (isoformat)
 """
 scalar Time
 
-scalar UUID
-
-input UpdateDayAvailabilityInput {
-  dayAvailabilityId: UUID!
+input TimeRangeInput {
+  dayAvailabilityId: UUID
   endTime: Time!
   startTime: Time!
 }
+
+scalar UUID
 
 input UpdateResourceInput {
   availableTime: Int

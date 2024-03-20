@@ -1,30 +1,45 @@
 import { useDayAvailabilityActions } from '@/graphql/hooks/myDayAvailability/useDayAvailabilityActions';
-import { useState } from 'react';
+import { UseFormReturn } from 'react-hook-form';
+import { z } from 'zod';
+import { FormSchema } from './constants';
 
-export const useConnect = () => {
-	const [timeSlots, setTimeSlots] = useState<{ [key: string]: string[][] }>({});
+export const useConnect = (form: UseFormReturn<z.infer<typeof FormSchema>>) => {
+	const { createOrUpdateAvailability } = useDayAvailabilityActions();
 
-	const { createDayAvailability } = useDayAvailabilityActions();
-
-	function handleAddTimeSlot(day: string) {
-		setTimeSlots((prevTimeSlots) => ({
-			...prevTimeSlots,
-			[day]: [...(prevTimeSlots[day] || []), ['', '']],
-		}));
+	function handleAddTimeSlot(dayId: string) {
+		const currentWeekdays = form.watch('weekdays');
+		const updatedWeekdays = currentWeekdays.map((day) => {
+			if (day.id === dayId) {
+				return {
+					...day,
+					timeSlots: [...(day.timeSlots || []), ['', '']],
+				};
+			}
+			return day;
+		});
+		form.setValue('weekdays', updatedWeekdays);
 	}
 
-	function handleRemoveTimeSlot(day: string, index: number) {
-		setTimeSlots((prevTimeSlots) => ({
-			...prevTimeSlots,
-			[day]: prevTimeSlots[day].filter((_, i) => i !== index),
-		}));
+	function handleRemoveTimeSlot(dayId: string, index: number) {
+		const currentWeekdays = form.watch('weekdays');
+		const updatedWeekdays = currentWeekdays.map((day) => {
+			if (day.id === dayId) {
+				const updatedTimeSlots = day.timeSlots.filter(
+					(_, i: number) => i !== index
+				);
+				return {
+					...day,
+					timeSlots: updatedTimeSlots,
+				};
+			}
+			return day;
+		});
+		form.setValue('weekdays', updatedWeekdays);
 	}
 
 	return {
-		timeSlots,
-		setTimeSlots,
 		handleAddTimeSlot,
 		handleRemoveTimeSlot,
-		createDayAvailability,
+		createOrUpdateAvailability,
 	};
 };

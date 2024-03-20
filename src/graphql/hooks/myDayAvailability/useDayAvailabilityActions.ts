@@ -1,28 +1,55 @@
 import {
-	CreateDayAvailabilityDocument,
-	CreateDayAvailabilityMutation,
-	CreateDayAvailabilityMutationVariables,
+	CreateOrUpdateAvailabilityDocument,
+	CreateOrUpdateAvailabilityMutation,
+	CreateOrUpdateAvailabilityMutationVariables,
+	DeleteDayAvailabilityDocument,
+	DeleteDayAvailabilityMutation,
+	DeleteDayAvailabilityMutationVariables,
 } from '@/graphql/generated/types';
-import { useMutation } from '@apollo/client';
+import { ApolloError, useMutation } from '@apollo/client';
 import { useCallback } from 'react';
 
 export function useDayAvailabilityActions() {
-	const [performCreate, { loading: isCreateLoading }] = useMutation<
-		CreateDayAvailabilityMutation,
-		CreateDayAvailabilityMutationVariables
-	>(CreateDayAvailabilityDocument);
+	const [performCreateOrUpdateAvailability] = useMutation<
+		CreateOrUpdateAvailabilityMutation,
+		CreateOrUpdateAvailabilityMutationVariables
+	>(CreateOrUpdateAvailabilityDocument);
 
-	const createDayAvailability = useCallback(
-		async (variables: CreateDayAvailabilityMutationVariables) => {
-			const raw = await performCreate({
+	const [performDelete] = useMutation<
+		DeleteDayAvailabilityMutation,
+		DeleteDayAvailabilityMutationVariables
+	>(DeleteDayAvailabilityDocument);
+
+	const createOrUpdateAvailability = useCallback(
+		async (variables: CreateOrUpdateAvailabilityMutationVariables) => {
+			const raw = await performCreateOrUpdateAvailability({
 				variables,
 			});
-			return raw.data?.createDayAvailability;
+			return raw.data?.createOrUpdateAvailability;
 		},
-		[performCreate]
+		[performCreateOrUpdateAvailability]
+	);
+
+	const deleteDayAvailability = useCallback(
+		async (id: DeleteDayAvailabilityMutationVariables['id']) => {
+			try {
+				const { data } = await performDelete({
+					variables: { id },
+				});
+				if (data?.deleteDayAvailability) {
+					return true;
+				}
+			} catch (e) {
+				if (e instanceof ApolloError) {
+					throw e;
+				}
+			}
+		},
+		[performDelete]
 	);
 
 	return {
-		createDayAvailability,
+		createOrUpdateAvailability,
+		deleteDayAvailability,
 	};
 }

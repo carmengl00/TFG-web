@@ -1,19 +1,10 @@
 import {
-	DeleteResourceDocument,
-	DeleteResourceMutation,
 	MyResourcesDocument,
 	MyResourcesQuery,
 	MyResourcesQueryVariables,
 	PaginationInput,
 } from '@/graphql/generated/types';
-import { DeleteResourceMutationVariables } from '@/graphql/generated/types';
-import {
-	ApolloError,
-	FetchPolicy,
-	useMutation,
-	useQuery,
-} from '@apollo/client';
-import { useCallback } from 'react';
+import { FetchPolicy, useQuery } from '@apollo/client';
 import { useMe } from '../users/useMe';
 
 export const useMyResources = ({

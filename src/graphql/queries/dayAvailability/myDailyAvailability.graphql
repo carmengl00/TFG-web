@@ -1,0 +1,17 @@
+query myDailyAvailability(
+    $input: MonthInput!,
+){
+  myDailyAvailability(
+    input: $input
+  ){
+    day
+    availabilities{
+      id
+      resource{
+        name
+      }
+      startTime
+      endTime
+    }
+  }
+}

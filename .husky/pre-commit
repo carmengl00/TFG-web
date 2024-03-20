@@ -1,1 +1,4 @@
+npm run biome:format
+npm run biome:lint
+npm run biome:apply
 npx lint-staged

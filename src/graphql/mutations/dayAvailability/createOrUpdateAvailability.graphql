@@ -1,0 +1,3 @@
+mutation createOrUpdateAvailability($input:CreateOrUpdateAvailabilityInput!){
+    createOrUpdateAvailability(input:$input)
+}

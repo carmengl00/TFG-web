@@ -21,16 +21,17 @@ export function getDaysBetweenDates(
 	return matchingDates;
 }
 
+export const daysOfWeek = [
+	'Monday',
+	'Tuesday',
+	'Wednesday',
+	'Thursday',
+	'Friday',
+	'Saturday',
+	'Sunday',
+];
+
 export function getDayOfWeek(dateString: string): string {
-	const daysOfWeek = [
-		'Sunday',
-		'Monday',
-		'Tuesday',
-		'Wednesday',
-		'Thursday',
-		'Friday',
-		'Saturday',
-	];
 	const date = new Date(dateString);
-	return daysOfWeek[date.getDay()];
+	return daysOfWeek[date.getDay() - 1];
 }
