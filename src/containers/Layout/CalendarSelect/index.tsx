@@ -8,7 +8,7 @@ import { useMyDayAvailability } from '@/graphql/hooks/myDayAvailability/useMyDay
 import { formatDate } from '@/utils/formatDate';
 import { isGraphqlMessageError } from '@/utils/isGraphqlMessageError';
 import { isSameDay, isWithinInterval } from 'date-fns';
-import { PlusCircle, X } from 'lucide-react';
+import { ChevronRight, PlusCircle, X } from 'lucide-react';
 import { useRouter } from 'next/router';
 import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
@@ -17,13 +17,22 @@ import { useConnect } from './connect';
 
 interface CalendarSelectProps {
 	resourceId: string;
+	isEdition: boolean;
 	date: {
 		from: Date;
 		to: Date;
 	};
+	setShowCheckbox: React.Dispatch<React.SetStateAction<boolean>>;
+	setShowCalendarSelect: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-export const CalendarSelect = ({ resourceId, date }: CalendarSelectProps) => {
+export const CalendarSelect = ({
+	resourceId,
+	date,
+	isEdition,
+	setShowCheckbox,
+	setShowCalendarSelect,
+}: CalendarSelectProps) => {
 	const form = useForm();
 	const [selectedDays, setSelectedDays] = useState<SelectedDay[]>([]);
 	const startDate = date.from;
@@ -168,6 +177,11 @@ export const CalendarSelect = ({ resourceId, date }: CalendarSelectProps) => {
 		}
 	}
 
+	const handleShowCheckbox = () => {
+		setShowCalendarSelect(false);
+		setShowCheckbox(true);
+	};
+
 	return (
 		<Form {...form}>
 			<form
@@ -178,7 +192,7 @@ export const CalendarSelect = ({ resourceId, date }: CalendarSelectProps) => {
 			>
 				<h2 className="mt-10 ml-32 text-2xl">Disponibilidad</h2>
 				<p className="mt-5 ml-32">
-					¿Hay algún día en el que tu recurso no esté disponible?
+					¿Hay algún día en el que tu recurso no esté disponible? Personalízalo.
 				</p>
 				<div className="flex flex-row w-full mt-5 ml-28">
 					<Calendar
@@ -296,7 +310,19 @@ export const CalendarSelect = ({ resourceId, date }: CalendarSelectProps) => {
 					)}
 				</div>
 				<div className="mt-10 mb-5 ml-32">
-					<Button type="submit">Guardar</Button>
+					<div className="flex justify-between items-center">
+						<Button type="submit">Guardar</Button>
+						{isEdition ? (
+							<Button
+								className="mr-32"
+								type="button"
+								variant={'outline'}
+								onClick={handleShowCheckbox}
+							>
+								<ChevronRight /> Editar en lote
+							</Button>
+						) : null}
+					</div>
 					{errorMessage && <p className="mt-5 text-red-600">{errorMessage}</p>}
 				</div>
 			</form>

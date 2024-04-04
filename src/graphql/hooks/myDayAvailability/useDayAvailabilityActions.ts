@@ -2,6 +2,9 @@ import {
 	CreateOrUpdateAvailabilityDocument,
 	CreateOrUpdateAvailabilityMutation,
 	CreateOrUpdateAvailabilityMutationVariables,
+	DeleteAllAvailabilitiesDocument,
+	DeleteAllAvailabilitiesMutation,
+	DeleteAllAvailabilitiesMutationVariables,
 	DeleteDayAvailabilityDocument,
 	DeleteDayAvailabilityMutation,
 	DeleteDayAvailabilityMutationVariables,
@@ -19,6 +22,11 @@ export function useDayAvailabilityActions() {
 		DeleteDayAvailabilityMutation,
 		DeleteDayAvailabilityMutationVariables
 	>(DeleteDayAvailabilityDocument);
+
+	const [performDeleteAll] = useMutation<
+		DeleteAllAvailabilitiesMutation,
+		DeleteAllAvailabilitiesMutationVariables
+	>(DeleteAllAvailabilitiesDocument);
 
 	const createOrUpdateAvailability = useCallback(
 		async (variables: CreateOrUpdateAvailabilityMutationVariables) => {
@@ -48,8 +56,29 @@ export function useDayAvailabilityActions() {
 		[performDelete]
 	);
 
+	const deleteAllAvailabilities = useCallback(
+		async (
+			resourceId: DeleteAllAvailabilitiesMutationVariables['resourceId']
+		) => {
+			try {
+				const { data } = await performDeleteAll({
+					variables: { resourceId },
+				});
+				if (data?.deleteAllAvailabilities) {
+					return true;
+				}
+			} catch (e) {
+				if (e instanceof ApolloError) {
+					throw e;
+				}
+			}
+		},
+		[performDeleteAll]
+	);
+
 	return {
 		createOrUpdateAvailability,
 		deleteDayAvailability,
+		deleteAllAvailabilities,
 	};
 }

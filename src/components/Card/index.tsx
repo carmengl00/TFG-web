@@ -1,12 +1,12 @@
+import { paths } from '@/globals/paths';
 import { useResourceActions } from '@/graphql/hooks/myResources/useResourceActions';
 import {
 	CalendarDays,
 	ChevronDownIcon,
 	CircleIcon,
-	Settings,
 	Settings2,
-	Trash2,
 } from 'lucide-react';
+import { useRouter } from 'next/router';
 import { Button } from '../ui/button';
 import {
 	Card,
@@ -18,7 +18,6 @@ import {
 import {
 	DropdownMenu,
 	DropdownMenuContent,
-	DropdownMenuGroup,
 	DropdownMenuItem,
 	DropdownMenuTrigger,
 } from '../ui/dropdown-menu';
@@ -48,6 +47,7 @@ const CustomCard = ({
 		{ month: 'long' }
 	)} de ${endDate.getFullYear()}`;
 
+	const { push, query } = useRouter();
 	const { deleteResource } = useResourceActions();
 
 	return (
@@ -86,6 +86,16 @@ const CustomCard = ({
 								className="w-[200px]"
 								forceMount
 							>
+								<DropdownMenuItem
+									onClick={() =>
+										push({
+											pathname: paths.editResource,
+											query: { ...query, id: id },
+										})
+									}
+								>
+									Editar
+								</DropdownMenuItem>
 								<DropdownMenuItem onClick={() => deleteResource(id)}>
 									Eliminar
 								</DropdownMenuItem>
@@ -98,7 +108,9 @@ const CustomCard = ({
 						<div className="flex items-center">
 							<CalendarDays className="mr-1 h-3 w-3" />
 							Tiempo disponible por reserva: {'   '}
-							{availableTime} minutos
+							{availableTime >= 60
+								? `${availableTime / 60} hora${availableTime >= 120 ? 's' : ''}`
+								: `${availableTime} minutos`}
 						</div>
 					</div>
 				</CardContent>

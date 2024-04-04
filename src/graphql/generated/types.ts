@@ -90,6 +90,8 @@ export type Mutation = {
 	createOrUpdateAvailability: Scalars['Boolean']['output'];
 	/** Creates a resource */
 	createResource: ResourceType;
+	/** Deletes all availabilities from a resource */
+	deleteAllAvailabilities: Scalars['Boolean']['output'];
 	/** Delete a day availability */
 	deleteDayAvailability: Scalars['Boolean']['output'];
 	/** Delete your resource */
@@ -115,6 +117,10 @@ export type MutationCreateOrUpdateAvailabilityArgs = {
 
 export type MutationCreateResourceArgs = {
 	input: ResourceInput;
+};
+
+export type MutationDeleteAllAvailabilitiesArgs = {
+	resourceId: Scalars['UUID']['input'];
 };
 
 export type MutationDeleteDayAvailabilityArgs = {
@@ -182,6 +188,8 @@ export type Query = {
 	myDailyAvailability: Array<DayAvailabilityGroupType>;
 	/** Returns a list of your resources. */
 	myResources: PaginatedResourceType;
+	/** Return a resource */
+	resource: ResourceType;
 };
 
 export type QueryMyDailyAvailabilityArgs = {
@@ -190,6 +198,10 @@ export type QueryMyDailyAvailabilityArgs = {
 
 export type QueryMyResourcesArgs = {
 	pagination?: InputMaybe<PaginationInput>;
+};
+
+export type QueryResourceArgs = {
+	id: Scalars['UUID']['input'];
 };
 
 export type RegisterInput = {
@@ -304,6 +316,14 @@ export type CreateOrUpdateAvailabilityMutation = {
 	createOrUpdateAvailability: boolean;
 };
 
+export type DeleteAllAvailabilitiesMutationVariables = Exact<{
+	resourceId: Scalars['UUID']['input'];
+}>;
+
+export type DeleteAllAvailabilitiesMutation = {
+	deleteAllAvailabilities: boolean;
+};
+
 export type DeleteDayAvailabilityMutationVariables = Exact<{
 	id: Scalars['UUID']['input'];
 }>;
@@ -339,6 +359,30 @@ export type DeleteResourceMutationVariables = Exact<{
 }>;
 
 export type DeleteResourceMutation = { deleteResource: boolean };
+
+export type UpdateResourceMutationVariables = Exact<{
+	input: UpdateResourceInput;
+}>;
+
+export type UpdateResourceMutation = {
+	updateResource: {
+		id: string;
+		name: string;
+		description: string;
+		availableTime: number;
+		startDate: string;
+		endDate: string;
+		location?: string | undefined;
+		user: {
+			id: string;
+			firstName: string;
+			lastName: string;
+			email: string;
+			publicName: string;
+			created: string;
+		};
+	};
+};
 
 export type MyDailyAvailabilityQueryVariables = Exact<{
 	input: MonthInput;
@@ -378,6 +422,23 @@ export type MyResourcesQuery = {
 			location?: string | undefined;
 			user: { email: string };
 		}>;
+	};
+};
+
+export type ResourceQueryVariables = Exact<{
+	id: Scalars['UUID']['input'];
+}>;
+
+export type ResourceQuery = {
+	resource: {
+		id: string;
+		name: string;
+		description: string;
+		availableTime: number;
+		startDate: string;
+		endDate: string;
+		location?: string | undefined;
+		user: { email: string };
 	};
 };
 
@@ -581,6 +642,51 @@ export const CreateOrUpdateAvailabilityDocument = {
 	CreateOrUpdateAvailabilityMutation,
 	CreateOrUpdateAvailabilityMutationVariables
 >;
+export const DeleteAllAvailabilitiesDocument = {
+	kind: 'Document',
+	definitions: [
+		{
+			kind: 'OperationDefinition',
+			operation: 'mutation',
+			name: { kind: 'Name', value: 'deleteAllAvailabilities' },
+			variableDefinitions: [
+				{
+					kind: 'VariableDefinition',
+					variable: {
+						kind: 'Variable',
+						name: { kind: 'Name', value: 'resourceId' },
+					},
+					type: {
+						kind: 'NonNullType',
+						type: { kind: 'NamedType', name: { kind: 'Name', value: 'UUID' } },
+					},
+				},
+			],
+			selectionSet: {
+				kind: 'SelectionSet',
+				selections: [
+					{
+						kind: 'Field',
+						name: { kind: 'Name', value: 'deleteAllAvailabilities' },
+						arguments: [
+							{
+								kind: 'Argument',
+								name: { kind: 'Name', value: 'resourceId' },
+								value: {
+									kind: 'Variable',
+									name: { kind: 'Name', value: 'resourceId' },
+								},
+							},
+						],
+					},
+				],
+			},
+		},
+	],
+} as unknown as DocumentNode<
+	DeleteAllAvailabilitiesMutation,
+	DeleteAllAvailabilitiesMutationVariables
+>;
 export const DeleteDayAvailabilityDocument = {
 	kind: 'Document',
 	definitions: [
@@ -754,6 +860,96 @@ export const DeleteResourceDocument = {
 } as unknown as DocumentNode<
 	DeleteResourceMutation,
 	DeleteResourceMutationVariables
+>;
+export const UpdateResourceDocument = {
+	kind: 'Document',
+	definitions: [
+		{
+			kind: 'OperationDefinition',
+			operation: 'mutation',
+			name: { kind: 'Name', value: 'updateResource' },
+			variableDefinitions: [
+				{
+					kind: 'VariableDefinition',
+					variable: {
+						kind: 'Variable',
+						name: { kind: 'Name', value: 'input' },
+					},
+					type: {
+						kind: 'NonNullType',
+						type: {
+							kind: 'NamedType',
+							name: { kind: 'Name', value: 'UpdateResourceInput' },
+						},
+					},
+				},
+			],
+			selectionSet: {
+				kind: 'SelectionSet',
+				selections: [
+					{
+						kind: 'Field',
+						name: { kind: 'Name', value: 'updateResource' },
+						arguments: [
+							{
+								kind: 'Argument',
+								name: { kind: 'Name', value: 'input' },
+								value: {
+									kind: 'Variable',
+									name: { kind: 'Name', value: 'input' },
+								},
+							},
+						],
+						selectionSet: {
+							kind: 'SelectionSet',
+							selections: [
+								{ kind: 'Field', name: { kind: 'Name', value: 'id' } },
+								{ kind: 'Field', name: { kind: 'Name', value: 'name' } },
+								{ kind: 'Field', name: { kind: 'Name', value: 'description' } },
+								{
+									kind: 'Field',
+									name: { kind: 'Name', value: 'availableTime' },
+								},
+								{ kind: 'Field', name: { kind: 'Name', value: 'startDate' } },
+								{ kind: 'Field', name: { kind: 'Name', value: 'endDate' } },
+								{ kind: 'Field', name: { kind: 'Name', value: 'location' } },
+								{
+									kind: 'Field',
+									name: { kind: 'Name', value: 'user' },
+									selectionSet: {
+										kind: 'SelectionSet',
+										selections: [
+											{ kind: 'Field', name: { kind: 'Name', value: 'id' } },
+											{
+												kind: 'Field',
+												name: { kind: 'Name', value: 'firstName' },
+											},
+											{
+												kind: 'Field',
+												name: { kind: 'Name', value: 'lastName' },
+											},
+											{ kind: 'Field', name: { kind: 'Name', value: 'email' } },
+											{
+												kind: 'Field',
+												name: { kind: 'Name', value: 'publicName' },
+											},
+											{
+												kind: 'Field',
+												name: { kind: 'Name', value: 'created' },
+											},
+										],
+									},
+								},
+							],
+						},
+					},
+				],
+			},
+		},
+	],
+} as unknown as DocumentNode<
+	UpdateResourceMutation,
+	UpdateResourceMutationVariables
 >;
 export const MyDailyAvailabilityDocument = {
 	kind: 'Document',
@@ -950,6 +1146,70 @@ export const MyResourcesDocument = {
 		},
 	],
 } as unknown as DocumentNode<MyResourcesQuery, MyResourcesQueryVariables>;
+export const ResourceDocument = {
+	kind: 'Document',
+	definitions: [
+		{
+			kind: 'OperationDefinition',
+			operation: 'query',
+			name: { kind: 'Name', value: 'resource' },
+			variableDefinitions: [
+				{
+					kind: 'VariableDefinition',
+					variable: { kind: 'Variable', name: { kind: 'Name', value: 'id' } },
+					type: {
+						kind: 'NonNullType',
+						type: { kind: 'NamedType', name: { kind: 'Name', value: 'UUID' } },
+					},
+				},
+			],
+			selectionSet: {
+				kind: 'SelectionSet',
+				selections: [
+					{
+						kind: 'Field',
+						name: { kind: 'Name', value: 'resource' },
+						arguments: [
+							{
+								kind: 'Argument',
+								name: { kind: 'Name', value: 'id' },
+								value: {
+									kind: 'Variable',
+									name: { kind: 'Name', value: 'id' },
+								},
+							},
+						],
+						selectionSet: {
+							kind: 'SelectionSet',
+							selections: [
+								{
+									kind: 'Field',
+									name: { kind: 'Name', value: 'user' },
+									selectionSet: {
+										kind: 'SelectionSet',
+										selections: [
+											{ kind: 'Field', name: { kind: 'Name', value: 'email' } },
+										],
+									},
+								},
+								{ kind: 'Field', name: { kind: 'Name', value: 'id' } },
+								{ kind: 'Field', name: { kind: 'Name', value: 'name' } },
+								{ kind: 'Field', name: { kind: 'Name', value: 'description' } },
+								{
+									kind: 'Field',
+									name: { kind: 'Name', value: 'availableTime' },
+								},
+								{ kind: 'Field', name: { kind: 'Name', value: 'startDate' } },
+								{ kind: 'Field', name: { kind: 'Name', value: 'endDate' } },
+								{ kind: 'Field', name: { kind: 'Name', value: 'location' } },
+							],
+						},
+					},
+				],
+			},
+		},
+	],
+} as unknown as DocumentNode<ResourceQuery, ResourceQueryVariables>;
 export const GetMeDocument = {
 	kind: 'Document',
 	definitions: [

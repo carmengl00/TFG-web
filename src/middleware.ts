@@ -10,5 +10,5 @@ export function middleware(request: NextRequest) {
 }
 
 export const config = {
-	matcher: ['/', '/resource/new'],
+	matcher: ['/', '/resource/new', '/resource/[id]/edit'],
 };

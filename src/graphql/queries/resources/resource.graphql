@@ -1,0 +1,18 @@
+query resource(
+    $id: UUID!
+){
+  resource(
+    id: $id
+  ){
+    user{
+      email
+    }
+    id
+    name
+    description
+    availableTime
+    startDate
+    endDate
+    location
+  }
+}

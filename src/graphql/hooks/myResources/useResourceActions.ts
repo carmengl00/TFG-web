@@ -6,6 +6,9 @@ import {
 	DeleteResourceMutation,
 	DeleteResourceMutationVariables,
 	MyResourcesDocument,
+	UpdateResourceDocument,
+	UpdateResourceMutation,
+	UpdateResourceMutationVariables,
 } from '@/graphql/generated/types';
 import { ApolloError } from '@apollo/client';
 import { useMutation } from '@apollo/client/react';
@@ -16,6 +19,11 @@ export function useResourceActions() {
 		CreateResourceMutation,
 		CreateResourceMutationVariables
 	>(CreateResourceDocument);
+
+	const [performUpdate] = useMutation<
+		UpdateResourceMutation,
+		UpdateResourceMutationVariables
+	>(UpdateResourceDocument);
 
 	const [performDelete] = useMutation<
 		DeleteResourceMutation,
@@ -30,6 +38,16 @@ export function useResourceActions() {
 			return raw.data?.createResource;
 		},
 		[performCreate]
+	);
+
+	const updateResource = useCallback(
+		async (input: UpdateResourceMutationVariables['input']) => {
+			const raw = await performUpdate({
+				variables: { input },
+			});
+			return raw.data?.updateResource;
+		},
+		[performUpdate]
 	);
 
 	const deleteResource = useCallback(
@@ -54,6 +72,7 @@ export function useResourceActions() {
 	return {
 		createResource,
 		isCreateLoading,
+		updateResource,
 		deleteResource,
 	};
 }

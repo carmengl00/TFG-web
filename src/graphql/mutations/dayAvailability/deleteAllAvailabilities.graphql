@@ -1,0 +1,3 @@
+mutation deleteAllAvailabilities($resourceId: UUID!) {
+    deleteAllAvailabilities(resourceId:$resourceId)
+}

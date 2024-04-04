@@ -74,6 +74,11 @@ type Mutation {
   createResource(input: ResourceInput!): ResourceType!
 
   """
+  Deletes all availabilities from a resource
+  """
+  deleteAllAvailabilities(resourceId: UUID!): Boolean!
+
+  """
   Delete a day availability
   """
   deleteDayAvailability(id: UUID!): Boolean!
@@ -131,6 +136,11 @@ type Query {
   Returns a list of your resources.
   """
   myResources(pagination: PaginationInput = null): PaginatedResourceType!
+
+  """
+  Return a resource
+  """
+  resource(id: UUID!): ResourceType!
 }
 
 input RegisterInput {

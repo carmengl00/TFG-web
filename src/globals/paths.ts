@@ -5,4 +5,5 @@ export const paths = {
 		home: '/',
 	},
 	newResource: '/resource/new',
+	editResource: '/resource/[id]/edit',
 };

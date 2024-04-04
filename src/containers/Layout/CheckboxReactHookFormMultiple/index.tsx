@@ -25,6 +25,7 @@ import { useConnect } from './connect';
 import { FormSchema, daysOfWeekSpanish } from './constants';
 
 interface CheckboxReactHookFormMultipleProps {
+	isEdition: boolean;
 	onButtonClick: () => void;
 	resourceId: string;
 	startDate: Date;
@@ -32,6 +33,7 @@ interface CheckboxReactHookFormMultipleProps {
 }
 
 export const CheckboxReactHookFormMultiple = ({
+	isEdition,
 	onButtonClick,
 	resourceId,
 	startDate,
@@ -53,6 +55,7 @@ export const CheckboxReactHookFormMultiple = ({
 		handleAddTimeSlot,
 		handleRemoveTimeSlot,
 		createOrUpdateAvailability,
+		deleteAllAvailabilities,
 	} = useConnect(form);
 
 	const [errorMessage, setErrorMessage] = useState<string | null>(null);
@@ -82,13 +85,22 @@ export const CheckboxReactHookFormMultiple = ({
 					timeRange: timeRange,
 				});
 			}
-			console.log('ITEMS', itemsToCreateOrUpdate);
-			await createOrUpdateAvailability({
-				input: {
-					resourceId: resourceId,
-					items: itemsToCreateOrUpdate,
-				},
-			});
+			if (isEdition) {
+				deleteAllAvailabilities(resourceId);
+				await createOrUpdateAvailability({
+					input: {
+						resourceId: resourceId,
+						items: itemsToCreateOrUpdate,
+					},
+				});
+			} else {
+				await createOrUpdateAvailability({
+					input: {
+						resourceId: resourceId,
+						items: itemsToCreateOrUpdate,
+					},
+				});
+			}
 
 			onButtonClick();
 		} catch (error) {
@@ -120,7 +132,17 @@ export const CheckboxReactHookFormMultiple = ({
 								</FormLabel>
 								<FormDescription>
 									Selecciona los días y franjas horarias en los que tu recurso
-									estará disponible
+									estará disponible.
+									{isEdition ? (
+										<>
+											<br />
+											<span className="text-red-400">
+												¡Atención! Editar las disponibilidades diarias eliminará
+												las creadas y las disponibilidades personalizadas, para
+												posteriormente crear las seleccionadas a continuación.
+											</span>
+										</>
+									) : null}
 								</FormDescription>
 							</div>
 							{weekdays.map((item) => (
