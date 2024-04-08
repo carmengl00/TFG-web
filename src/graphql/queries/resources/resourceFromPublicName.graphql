@@ -1,0 +1,19 @@
+query resourceFromPublicName(
+    $publicName: String!
+){
+  resourceFromPublicName(
+    publicName: $publicName
+  ){
+    user{
+      firstName
+      lastName
+    }
+    id
+    name
+    description
+    availableTime
+    startDate
+    endDate
+    location
+  }
+}

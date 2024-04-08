@@ -141,6 +141,11 @@ type Query {
   Return a resource
   """
   resource(id: UUID!): ResourceType!
+
+  """
+  Return a resource from public name
+  """
+  resourceFromPublicName(publicName: String!): [ResourceType!]!
 }
 
 input RegisterInput {

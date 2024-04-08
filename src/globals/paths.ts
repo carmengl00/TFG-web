@@ -6,4 +6,5 @@ export const paths = {
 	},
 	newResource: '/resource/new',
 	editResource: '/resource/[id]/edit',
+	reservation: '/[publicName]/[id]',
 };
