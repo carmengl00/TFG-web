@@ -1,0 +1,3 @@
+mutation deleteDayAvailability($id: UUID!) {
+    deleteDayAvailability(id:$id)
+}

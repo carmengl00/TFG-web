@@ -1,0 +1,26 @@
+query myResources(
+    $pagination: PaginationInput
+){
+  myResources(
+    pagination: $pagination
+  ){
+    pageInfo{
+      page
+      pages
+      totalResults
+      hasNext
+    }
+    edges{
+      id
+      name
+      description
+      availableTime
+      startDate
+      endDate
+      location
+      user{
+        email
+      }
+    }
+  }
+}

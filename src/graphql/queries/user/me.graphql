@@ -1,0 +1,11 @@
+query getMe {
+  me {
+    id
+    firstName
+    lastName
+    email
+    publicName
+    created
+    token
+  }
+}

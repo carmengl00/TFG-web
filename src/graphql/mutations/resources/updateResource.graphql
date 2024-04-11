@@ -1,0 +1,19 @@
+mutation updateResource($input:UpdateResourceInput!){
+    updateResource(input:$input){
+        id
+        name
+        description
+        availableTime
+        startDate
+        endDate
+        location
+        user{
+            id
+            firstName
+            lastName
+            email
+            publicName
+            created
+        }
+    }
+}

@@ -1,0 +1,262 @@
+input ChangePasswordInput {
+  currentPassword: String!
+  password: String!
+  repeatPassword: String
+}
+
+input CreateOrUpdateAvailabilityInput {
+  items: [DayAvailabilityInput!]!
+  resourceId: UUID!
+}
+
+"""
+Date (isoformat)
+"""
+scalar Date
+
+"""
+Date with time (isoformat)
+"""
+scalar DateTime
+
+type DayAvailabilityGroupType {
+  availabilities: [DayAvailabilityType!]!
+  day: Date!
+}
+
+input DayAvailabilityInput {
+  day: Date!
+  timeRange: [TimeRangeInput!]!
+}
+
+type DayAvailabilityType {
+  day: Date!
+  endTime: Time!
+  id: UUID!
+  resource: ResourceType!
+  startTime: Time!
+}
+
+input GetSlotsInput {
+  day: Date!
+  resourceId: UUID!
+}
+
+input GetUploadUrlInput {
+  contentType: String!
+  filename: String!
+  private: Boolean!
+}
+
+input LoginInput {
+  email: String!
+  password: String!
+}
+
+type MediaUploadUrlType {
+  contentType: String!
+  retrieveUrl: String!
+  uploadUrl: String!
+}
+
+input MonthInput {
+  month: Int!
+  resourceId: UUID!
+  year: Int!
+}
+
+type Mutation {
+  changePassword(input: ChangePasswordInput!): Boolean!
+
+  """
+  Creates or updates day availability
+  """
+  createOrUpdateAvailability(input: CreateOrUpdateAvailabilityInput!): Boolean!
+
+  """
+  Creates a resource
+  """
+  createResource(input: ResourceInput!): ResourceType!
+
+  """
+  Deletes all availabilities from a resource
+  """
+  deleteAllAvailabilities(resourceId: UUID!): Boolean!
+
+  """
+  Delete a day availability
+  """
+  deleteDayAvailability(id: UUID!): Boolean!
+
+  """
+  Delete your resource
+  """
+  deleteResource(id: UUID!): Boolean!
+  getUploadUrl(input: GetUploadUrlInput!): MediaUploadUrlType!
+  login(input: LoginInput!): UserTypeWeb!
+  logout: Boolean!
+  register(input: RegisterInput!): UserType!
+  requestResetPassword(input: RequestResetPasswordInput!): Boolean!
+  resetPassword(input: ResetPasswordInput!): Boolean!
+
+  """
+  Updates a resource
+  """
+  updateResource(input: UpdateResourceInput!): ResourceType!
+  user(input: ProfileInput!): UserType!
+}
+
+type PageInfoType {
+  hasNext: Boolean!
+  hasPrev: Boolean!
+  page: Int!
+  pages: Int!
+  totalResults: Int!
+}
+
+type PaginatedReservedSlotType {
+  edges: [ReservedSlotType!]!
+  pageInfo: PageInfoType!
+}
+
+type PaginatedResourceType {
+  edges: [ResourceType!]!
+  pageInfo: PageInfoType!
+}
+
+input PaginationInput {
+  page: Int
+  pageSize: Int
+}
+
+input ProfileInput {
+  firstName: String!
+  lastName: String!
+}
+
+type Query {
+  """
+  Return an array of slots for a day
+  """
+  getSlots(input: GetSlotsInput!): [SlotType!]!
+  me: UserType!
+
+  """
+  Returns a list of your daily availabilities.
+  """
+  myDailyAvailability(input: MonthInput!): [DayAvailabilityGroupType!]!
+
+  """
+  Returns a list of your reserved slots.
+  """
+  myReservedSlots(
+    pagination: PaginationInput = null
+  ): PaginatedReservedSlotType!
+
+  """
+  Returns a list of your resources.
+  """
+  myResources(pagination: PaginationInput = null): PaginatedResourceType!
+
+  """
+  Return a resource
+  """
+  resource(id: UUID!): ResourceType!
+
+  """
+  Return a resource from public name
+  """
+  resourceFromPublicName(publicName: String!): [ResourceType!]!
+}
+
+input RegisterInput {
+  email: String!
+  firstName: String!
+  lastName: String!
+  password: String!
+  publicName: String!
+}
+
+input RequestResetPasswordInput {
+  email: String!
+}
+
+type ReservedSlotType {
+  description: String!
+  email: String!
+  endTime: Time!
+  name: String!
+  resource: ResourceType!
+  startTime: Time!
+}
+
+input ResetPasswordInput {
+  password: String!
+  repeatPassword: String
+  token: String!
+}
+
+input ResourceInput {
+  availableTime: Int!
+  description: String!
+  endDate: Date!
+  location: String
+  name: String!
+  startDate: Date!
+}
+
+type ResourceType {
+  availableTime: Int!
+  description: String!
+  endDate: Date!
+  id: UUID!
+  location: String
+  name: String!
+  startDate: Date!
+  user: UserType!
+}
+
+type SlotType {
+  endTime: Time!
+  reserved: Boolean!
+  startTime: Time!
+}
+
+"""
+Time (isoformat)
+"""
+scalar Time
+
+input TimeRangeInput {
+  dayAvailabilityId: UUID
+  endTime: Time!
+  startTime: Time!
+}
+
+scalar UUID
+
+input UpdateResourceInput {
+  availableTime: Int
+  description: String
+  endDate: Date
+  location: String
+  name: String
+  resourceId: UUID!
+  startDate: Date
+}
+
+type UserType {
+  created: DateTime!
+  email: String!
+  firstName: String!
+  id: UUID!
+  lastName: String!
+  publicName: String!
+  token: String!
+}
+
+type UserTypeWeb {
+  refreshToken: String!
+  token: String!
+  user: UserType!
+}

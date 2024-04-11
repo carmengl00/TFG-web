@@ -1,32 +1,95 @@
 {
-  "name": "tfg-web",
-  "version": "0.1.0",
-  "private": true,
-  "scripts": {
-    "dev": "next dev",
-    "build": "next build",
-    "start": "next start",
-    "lint": "next lint"
-  },
-  "dependencies": {
-    "class-variance-authority": "^0.7.0",
-    "clsx": "^2.0.0",
-    "lucide-react": "^0.299.0",
-    "next": "14.0.3",
-    "react": "^18",
-    "react-dom": "^18",
-    "tailwind-merge": "^2.1.0",
-    "tailwindcss-animate": "^1.0.7"
-  },
-  "devDependencies": {
-    "@types/node": "^20",
-    "@types/react": "^18",
-    "@types/react-dom": "^18",
-    "autoprefixer": "^10.4.16",
-    "eslint": "^8",
-    "eslint-config-next": "14.0.3",
-    "postcss": "^8.4.32",
-    "tailwindcss": "^3.3.6",
-    "typescript": "^5"
-  }
+	"name": "tfg-web",
+	"version": "0.1.0",
+	"private": true,
+	"scripts": {
+		"dev": "next dev",
+		"build": "next build",
+		"start": "next start",
+		"lint": "next lint",
+		"gen:watch": "dotenv -c development -- graphql-codegen --watch",
+		"gen": "dotenv -c development -- graphql-codegen",
+		"biome:check": "biome check ./src",
+		"biome:format": "biome format ./src --write",
+		"biome:lint": "biome lint ./src",
+		"biome:apply": "biome check --apply ./src",
+		"postinstall": "husky install",
+		"prepare": "husky"
+	},
+	"husky": {
+		"hooks": {
+			"pre-commit": "lint-staged"
+		}
+	},
+	"lint-staged": {
+		"*.{js,ts,cjs,mjs,d.cts,d.mts,jsx,tsx,json,jsonc}": [
+			"biome check --files-ignore-unknown=true",
+			"biome check --apply --no-errors-on-unmatched",
+			"biome check --apply --organize-imports-enabled=false --no-errors-on-unmatched",
+			"biome check --apply-unsafe --no-errors-on-unmatched",
+			"biome format --write --no-errors-on-unmatched",
+			"biome lint --apply --no-errors-on-unmatched"
+		]
+	},
+	"dependencies": {
+		"@apollo/client": "^3.8.9",
+		"@emotion/react": "^11.11.3",
+		"@emotion/styled": "^11.11.0",
+		"@graphql-codegen/cli": "^5.0.0",
+		"@graphql-codegen/fragment-matcher": "^5.0.0",
+		"@graphql-codegen/typed-document-node": "^5.0.1",
+		"@graphql-codegen/typescript": "^4.0.1",
+		"@graphql-codegen/typescript-operations": "^4.0.1",
+		"@graphql-codegen/typescript-react-apollo": "^4.1.0",
+		"@hookform/resolvers": "^3.3.3",
+		"@mui/material": "^5.15.4",
+		"@radix-ui/react-avatar": "^1.0.4",
+		"@radix-ui/react-checkbox": "^1.0.4",
+		"@radix-ui/react-dropdown-menu": "^2.0.6",
+		"@radix-ui/react-label": "^2.0.2",
+		"@radix-ui/react-popover": "^1.0.7",
+		"@radix-ui/react-select": "^2.0.0",
+		"@radix-ui/react-separator": "^1.0.3",
+		"@radix-ui/react-slot": "^1.0.2",
+		"@radix-ui/react-toast": "^1.1.5",
+		"@radix-ui/react-tooltip": "^1.0.7",
+		"class-variance-authority": "^0.7.0",
+		"clsx": "^2.1.0",
+		"date-fns": "^3.3.1",
+		"dotenv": "^16.3.1",
+		"eslint": "^8.56.0",
+		"graphql": "^16.8.1",
+		"js-cookie": "^3.0.5",
+		"lodash": "^4.17.21",
+		"lucide-react": "^0.299.0",
+		"next": "14.0.3",
+		"pre-commit": "^1.2.2",
+		"react": "^18",
+		"react-apollo-network-status": "^5.2.1",
+		"react-day-picker": "^8.10.0",
+		"react-dom": "^18",
+		"react-hook-form": "^7.49.2",
+		"tailwind-merge": "^2.2.0",
+		"tailwindcss-animate": "^1.0.7",
+		"universal-cookie": "^7.0.1",
+		"uuid": "^9.0.1",
+		"zod": "^3.22.4"
+	},
+	"devDependencies": {
+		"@biomejs/biome": "1.5.3",
+		"@types/js-cookie": "^3.0.6",
+		"@types/lodash": "^4.14.202",
+		"@types/node": "^20",
+		"@types/react": "^18",
+		"@types/react-dom": "^18",
+		"@types/uuid": "^9.0.8",
+		"autoprefixer": "^10.4.16",
+		"eslint-config-next": "14.0.3",
+		"husky": "^9.0.6",
+		"lint-staged": "^15.2.0",
+		"postcss": "^8.4.32",
+		"prettier": "3.1.1",
+		"tailwindcss": "^3.3.6",
+		"typescript": "^5"
+	}
 }

@@ -1,37 +1,43 @@
 {
-    "files.associations": {
-        "*.css": "tailwindcss"
-      },
-    "eslint.validate": [
-      "javascript",
-      "typescript",
-      "javascriptreact",
-      "typescriptreact",
-      "json",
-      "html"
-    ],
-    "css.validate": false,
-    "editor.defaultFormatter": "esbenp.prettier-vscode",
-    "editor.formatOnSave": true,
-    "[markdown]": {
-      "editor.formatOnSave": false
-    },
-    "editor.suggestSelection": "first",
-    "editor.codeActionsOnSave": {
-      "source.fixAll.eslint": "explicit",
-      "source.fixAll.stylelint": "explicit"
-    },
-    "eslint.format.enable": true,
-    "less.validate": false,
-    "scss.validate": false,
-    "stylelint.enable": true,
-    "stylelint.packageManager": "yarn",
-    "stylelint.validate": [
-      "css",
-      "postcss",
-      "scss",
-      "typescript",
-      "typescriptreact"
-    ],
-    "cSpell.words": ["Grammarless"]
-  }
+	"files.associations": {
+		"*.css": "tailwindcss"
+	},
+	"eslint.validate": [
+		"javascript",
+		"typescript",
+		"javascriptreact",
+		"typescriptreact",
+		"json",
+		"html"
+	],
+	"css.validate": false,
+	"editor.defaultFormatter": "esbenp.prettier-vscode",
+	"editor.formatOnSave": true,
+	"[markdown]": {
+		"editor.formatOnSave": false
+	},
+	"editor.suggestSelection": "first",
+	"editor.codeActionsOnSave": {
+		"source.fixAll.eslint": "explicit",
+		"source.fixAll.stylelint": "explicit"
+	},
+	"eslint.format.enable": true,
+	"less.validate": false,
+	"scss.validate": false,
+	"stylelint.enable": true,
+	"stylelint.packageManager": "yarn",
+	"stylelint.validate": [
+		"css",
+		"postcss",
+		"scss",
+		"typescript",
+		"typescriptreact"
+	],
+	"cSpell.words": ["Grammarless"],
+	"[json]": {
+		"editor.defaultFormatter": "biomejs.biome"
+	},
+	"[typescriptreact]": {
+		"editor.defaultFormatter": "biomejs.biome"
+	}
+}
