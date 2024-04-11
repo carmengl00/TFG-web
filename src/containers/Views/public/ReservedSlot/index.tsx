@@ -5,7 +5,7 @@ import { UserDoesntExist } from '@/components/UserDoesntExist';
 import { useResource } from '@/graphql/hooks/myResources/useResource';
 import { addDays } from 'date-fns';
 import { useRouter } from 'next/router';
-import React from 'react';
+import React, { useState } from 'react';
 import { DateRange } from 'react-day-picker';
 
 export function ReservedSlotView() {
@@ -20,24 +20,48 @@ export function ReservedSlotView() {
 	};
 
 	const title = `${resource?.user.firstName} ${resource?.user.lastName}`;
+	const [showSelectHour, setShowSelectHour] = useState<boolean>(true);
+	const [showForm, setShowForm] = useState<boolean>(false);
 
 	return (
 		<>
-			{resource ? (
+			{showSelectHour ? (
 				<>
-					<HeaderReservation title={title} />
-					<ResourceDetailsReservation
-						resource={resource}
-						isResourceLoading={isResourceLoading}
-					>
-						<CalendarSelectSlot
-							date={{ from: defaultDate?.from, to: defaultDate?.to }}
-							resourceId={resource.id}
-						/>
-					</ResourceDetailsReservation>
+					{resource ? (
+						<>
+							<HeaderReservation title={title} />
+							<ResourceDetailsReservation
+								resource={resource}
+								isResourceLoading={isResourceLoading}
+								showForm={showForm}
+							>
+								<CalendarSelectSlot
+									date={{ from: defaultDate?.from, to: defaultDate?.to }}
+									resourceId={resource.id}
+									setShowSelectHour={setShowSelectHour}
+									setShowForm={setShowForm}
+								/>
+							</ResourceDetailsReservation>
+						</>
+					) : (
+						<UserDoesntExist />
+					)}
 				</>
 			) : (
-				<UserDoesntExist />
+				<>
+					{resource ? (
+						<>
+							<HeaderReservation title={title} />
+							<ResourceDetailsReservation
+								resource={resource}
+								isResourceLoading={isResourceLoading}
+								showForm={showForm}
+							/>
+						</>
+					) : (
+						<UserDoesntExist />
+					)}
+				</>
 			)}
 		</>
 	);

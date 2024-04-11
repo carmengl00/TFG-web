@@ -11,9 +11,16 @@ interface CalendarSelectSlotProps {
 		to: Date;
 	};
 	resourceId: string;
+	setShowSelectHour: React.Dispatch<React.SetStateAction<boolean>>;
+	setShowForm: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-const CalendarSelectSlot = ({ date, resourceId }: CalendarSelectSlotProps) => {
+const CalendarSelectSlot = ({
+	date,
+	resourceId,
+	setShowSelectHour,
+	setShowForm,
+}: CalendarSelectSlotProps) => {
 	const { getSlots } = useSlots();
 	const startDate = date.from;
 	const endDate = date.to;
@@ -64,6 +71,11 @@ const CalendarSelectSlot = ({ date, resourceId }: CalendarSelectSlotProps) => {
 
 	const handleSlotClick = (index: number) => {
 		setSelectedSlot(index === selectedSlot ? null : index);
+	};
+
+	const onClick = () => {
+		setShowSelectHour(false);
+		setShowForm(true);
 	};
 
 	return (
@@ -122,7 +134,7 @@ const CalendarSelectSlot = ({ date, resourceId }: CalendarSelectSlotProps) => {
 						</div>
 					)}
 				</div>
-				<Button className="mt-10" type="submit">
+				<Button className="mt-10" type="submit" onClick={onClick}>
 					Guardar
 				</Button>
 			</div>
