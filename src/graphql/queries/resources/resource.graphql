@@ -6,6 +6,8 @@ query resource(
   ){
     user{
       email
+      firstName
+      lastName
     }
     id
     name

@@ -61,6 +61,11 @@ export type DayAvailabilityType = {
 	startTime: Scalars['Time']['output'];
 };
 
+export type GetSlotsInput = {
+	day: Scalars['Date']['input'];
+	resourceId: Scalars['UUID']['input'];
+};
+
 export type GetUploadUrlInput = {
 	contentType: Scalars['String']['input'];
 	filename: Scalars['String']['input'];
@@ -167,6 +172,11 @@ export type PageInfoType = {
 	totalResults: Scalars['Int']['output'];
 };
 
+export type PaginatedReservedSlotType = {
+	edges: Array<ReservedSlotType>;
+	pageInfo: PageInfoType;
+};
+
 export type PaginatedResourceType = {
 	edges: Array<ResourceType>;
 	pageInfo: PageInfoType;
@@ -183,9 +193,13 @@ export type ProfileInput = {
 };
 
 export type Query = {
+	/** Return an array of slots for a day */
+	getSlots: Array<SlotType>;
 	me: UserType;
 	/** Returns a list of your daily availabilities. */
 	myDailyAvailability: Array<DayAvailabilityGroupType>;
+	/** Returns a list of your reserved slots. */
+	myReservedSlots: PaginatedReservedSlotType;
 	/** Returns a list of your resources. */
 	myResources: PaginatedResourceType;
 	/** Return a resource */
@@ -194,8 +208,16 @@ export type Query = {
 	resourceFromPublicName: Array<ResourceType>;
 };
 
+export type QueryGetSlotsArgs = {
+	input: GetSlotsInput;
+};
+
 export type QueryMyDailyAvailabilityArgs = {
 	input: MonthInput;
+};
+
+export type QueryMyReservedSlotsArgs = {
+	pagination?: InputMaybe<PaginationInput>;
 };
 
 export type QueryMyResourcesArgs = {
@@ -222,6 +244,15 @@ export type RequestResetPasswordInput = {
 	email: Scalars['String']['input'];
 };
 
+export type ReservedSlotType = {
+	description: Scalars['String']['output'];
+	email: Scalars['String']['output'];
+	endTime: Scalars['Time']['output'];
+	name: Scalars['String']['output'];
+	resource: ResourceType;
+	startTime: Scalars['Time']['output'];
+};
+
 export type ResetPasswordInput = {
 	password: Scalars['String']['input'];
 	repeatPassword?: InputMaybe<Scalars['String']['input']>;
@@ -246,6 +277,12 @@ export type ResourceType = {
 	name: Scalars['String']['output'];
 	startDate: Scalars['Date']['output'];
 	user: UserType;
+};
+
+export type SlotType = {
+	endTime: Scalars['Time']['output'];
+	reserved: Scalars['Boolean']['output'];
+	startTime: Scalars['Time']['output'];
 };
 
 export type TimeRangeInput = {
@@ -444,7 +481,7 @@ export type ResourceQuery = {
 		startDate: string;
 		endDate: string;
 		location?: string | undefined;
-		user: { email: string };
+		user: { email: string; firstName: string; lastName: string };
 	};
 };
 
@@ -463,6 +500,14 @@ export type ResourceFromPublicNameQuery = {
 		location?: string | undefined;
 		user: { firstName: string; lastName: string };
 	}>;
+};
+
+export type GetSlotsQueryVariables = Exact<{
+	input: GetSlotsInput;
+}>;
+
+export type GetSlotsQuery = {
+	getSlots: Array<{ startTime: string; endTime: string; reserved: boolean }>;
 };
 
 export type GetMeQueryVariables = Exact<{ [key: string]: never }>;
@@ -1212,6 +1257,14 @@ export const ResourceDocument = {
 										kind: 'SelectionSet',
 										selections: [
 											{ kind: 'Field', name: { kind: 'Name', value: 'email' } },
+											{
+												kind: 'Field',
+												name: { kind: 'Name', value: 'firstName' },
+											},
+											{
+												kind: 'Field',
+												name: { kind: 'Name', value: 'lastName' },
+											},
 										],
 									},
 								},
@@ -1313,6 +1366,59 @@ export const ResourceFromPublicNameDocument = {
 	ResourceFromPublicNameQuery,
 	ResourceFromPublicNameQueryVariables
 >;
+export const GetSlotsDocument = {
+	kind: 'Document',
+	definitions: [
+		{
+			kind: 'OperationDefinition',
+			operation: 'query',
+			name: { kind: 'Name', value: 'getSlots' },
+			variableDefinitions: [
+				{
+					kind: 'VariableDefinition',
+					variable: {
+						kind: 'Variable',
+						name: { kind: 'Name', value: 'input' },
+					},
+					type: {
+						kind: 'NonNullType',
+						type: {
+							kind: 'NamedType',
+							name: { kind: 'Name', value: 'GetSlotsInput' },
+						},
+					},
+				},
+			],
+			selectionSet: {
+				kind: 'SelectionSet',
+				selections: [
+					{
+						kind: 'Field',
+						name: { kind: 'Name', value: 'getSlots' },
+						arguments: [
+							{
+								kind: 'Argument',
+								name: { kind: 'Name', value: 'input' },
+								value: {
+									kind: 'Variable',
+									name: { kind: 'Name', value: 'input' },
+								},
+							},
+						],
+						selectionSet: {
+							kind: 'SelectionSet',
+							selections: [
+								{ kind: 'Field', name: { kind: 'Name', value: 'startTime' } },
+								{ kind: 'Field', name: { kind: 'Name', value: 'endTime' } },
+								{ kind: 'Field', name: { kind: 'Name', value: 'reserved' } },
+							],
+						},
+					},
+				],
+			},
+		},
+	],
+} as unknown as DocumentNode<GetSlotsQuery, GetSlotsQueryVariables>;
 export const GetMeDocument = {
 	kind: 'Document',
 	definitions: [

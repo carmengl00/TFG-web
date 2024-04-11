@@ -7,14 +7,15 @@ import { useQuery } from '@apollo/client';
 
 export const useResourceFromPublicName = ({
 	publicName,
-}: { publicName: string }) => {
+}: { publicName?: string | string[] }) => {
 	const { data } = useQuery<
 		ResourceFromPublicNameQuery,
 		ResourceFromPublicNameQueryVariables
 	>(ResourceFromPublicNameDocument, {
 		variables: {
-			publicName: publicName,
+			publicName: String(publicName),
 		},
+		skip: (!!publicName && typeof publicName !== 'string') || !publicName,
 	});
 
 	const resources = data?.resourceFromPublicName;

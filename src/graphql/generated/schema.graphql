@@ -37,6 +37,11 @@ type DayAvailabilityType {
   startTime: Time!
 }
 
+input GetSlotsInput {
+  day: Date!
+  resourceId: UUID!
+}
+
 input GetUploadUrlInput {
   contentType: String!
   filename: String!
@@ -109,6 +114,11 @@ type PageInfoType {
   totalResults: Int!
 }
 
+type PaginatedReservedSlotType {
+  edges: [ReservedSlotType!]!
+  pageInfo: PageInfoType!
+}
+
 type PaginatedResourceType {
   edges: [ResourceType!]!
   pageInfo: PageInfoType!
@@ -125,12 +135,23 @@ input ProfileInput {
 }
 
 type Query {
+  """
+  Return an array of slots for a day
+  """
+  getSlots(input: GetSlotsInput!): [SlotType!]!
   me: UserType!
 
   """
   Returns a list of your daily availabilities.
   """
   myDailyAvailability(input: MonthInput!): [DayAvailabilityGroupType!]!
+
+  """
+  Returns a list of your reserved slots.
+  """
+  myReservedSlots(
+    pagination: PaginationInput = null
+  ): PaginatedReservedSlotType!
 
   """
   Returns a list of your resources.
@@ -160,6 +181,15 @@ input RequestResetPasswordInput {
   email: String!
 }
 
+type ReservedSlotType {
+  description: String!
+  email: String!
+  endTime: Time!
+  name: String!
+  resource: ResourceType!
+  startTime: Time!
+}
+
 input ResetPasswordInput {
   password: String!
   repeatPassword: String
@@ -184,6 +214,12 @@ type ResourceType {
   name: String!
   startDate: Date!
   user: UserType!
+}
+
+type SlotType {
+  endTime: Time!
+  reserved: Boolean!
+  startTime: Time!
 }
 
 """

@@ -1,0 +1,11 @@
+query getSlots(
+    $input: GetSlotsInput!
+){
+  getSlots(
+    input: $input
+  ){
+    startTime
+    endTime
+    reserved
+  }
+}
