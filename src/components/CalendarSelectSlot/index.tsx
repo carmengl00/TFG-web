@@ -1,6 +1,6 @@
 import { useSlots } from '@/graphql/hooks/slots/useSlots';
 import '@/styles/styles.css';
-import { format, isSameDay, isWithinInterval } from 'date-fns';
+import { format, isAfter, isSameDay, isWithinInterval } from 'date-fns';
 import React, { useState } from 'react';
 import { Button } from '../ui/button';
 import { Calendar } from '../ui/calendar';
@@ -13,6 +13,7 @@ interface CalendarSelectSlotProps {
 	resourceId: string;
 	setShowSelectHour: React.Dispatch<React.SetStateAction<boolean>>;
 	setShowForm: React.Dispatch<React.SetStateAction<boolean>>;
+	setSchedule: React.Dispatch<React.SetStateAction<Schedule | undefined>>;
 }
 
 const CalendarSelectSlot = ({
@@ -20,6 +21,7 @@ const CalendarSelectSlot = ({
 	resourceId,
 	setShowSelectHour,
 	setShowForm,
+	setSchedule,
 }: CalendarSelectSlotProps) => {
 	const { getSlots } = useSlots();
 	const startDate = date.from;
@@ -74,8 +76,15 @@ const CalendarSelectSlot = ({
 	};
 
 	const onClick = () => {
-		setShowSelectHour(false);
-		setShowForm(true);
+		if (selectedDay && selectedSlot !== null) {
+			const { day, slot } = selectedDay;
+			const { startTime, endTime } = slot[selectedSlot];
+			setSchedule({ day, startTime, endTime });
+			setShowSelectHour(false);
+			setShowForm(true);
+		} else {
+			console.error('No se ha seleccionado un día o un slot.');
+		}
 	};
 
 	return (
@@ -110,25 +119,33 @@ const CalendarSelectSlot = ({
 									}}
 								>
 									{' '}
-									{selectedDay.slot.map((slot, slotIndex) => (
-										<Button
-											key={slot.startTime}
-											className={`button ${
-												slot.reserved ? 'reserved-background' : null
-											}`}
-											variant={slotIndex === selectedSlot ? 'default' : 'ghost'}
-											size="default"
-											onClick={() => handleSlotClick(slotIndex)}
-											style={{
-												marginBottom: '5px',
-												border: '1px solid black',
-											}}
-											disabled={slot.reserved}
-										>
-											{slot.startTime.slice(0, -3)} -{' '}
-											{slot.endTime.slice(0, -3)}
-										</Button>
-									))}
+									{isAfter(selectedDay.day, new Date()) ? (
+										selectedDay.slot.map((slot, slotIndex) => (
+											<Button
+												key={slot.startTime}
+												className={`button ${
+													slot.reserved ? 'reserved-background' : null
+												}`}
+												variant={
+													slotIndex === selectedSlot ? 'default' : 'ghost'
+												}
+												size="default"
+												onClick={() => handleSlotClick(slotIndex)}
+												style={{
+													marginBottom: '5px',
+													border: '1px solid black',
+												}}
+												disabled={slot.reserved}
+											>
+												{slot.startTime.slice(0, -3)} -{' '}
+												{slot.endTime.slice(0, -3)}
+											</Button>
+										))
+									) : (
+										<div className="mt-3">
+											¡Solo puedes reservar en un día posterior al de hoy!
+										</div>
+									)}
 								</div>
 							</div>
 						</div>

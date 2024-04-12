@@ -1,12 +1,12 @@
 import CalendarSelectSlot from '@/components/CalendarSelectSlot';
 import HeaderReservation from '@/components/HeaderReservation';
+import { ReservationForm } from '@/components/ReservationForm';
 import ResourceDetailsReservation from '@/components/ResourceDetailsReservation';
 import { UserDoesntExist } from '@/components/UserDoesntExist';
 import { useResource } from '@/graphql/hooks/myResources/useResource';
 import { addDays } from 'date-fns';
 import { useRouter } from 'next/router';
 import React, { useState } from 'react';
-import { DateRange } from 'react-day-picker';
 
 export function ReservedSlotView() {
 	const router = useRouter();
@@ -23,45 +23,34 @@ export function ReservedSlotView() {
 	const [showSelectHour, setShowSelectHour] = useState<boolean>(true);
 	const [showForm, setShowForm] = useState<boolean>(false);
 
+	const [schedule, setSchedule] = useState<Schedule>();
+
 	return (
 		<>
-			{showSelectHour ? (
+			{resource ? (
 				<>
-					{resource ? (
-						<>
-							<HeaderReservation title={title} />
-							<ResourceDetailsReservation
-								resource={resource}
-								isResourceLoading={isResourceLoading}
-								showForm={showForm}
-							>
-								<CalendarSelectSlot
-									date={{ from: defaultDate?.from, to: defaultDate?.to }}
-									resourceId={resource.id}
-									setShowSelectHour={setShowSelectHour}
-									setShowForm={setShowForm}
-								/>
-							</ResourceDetailsReservation>
-						</>
-					) : (
-						<UserDoesntExist />
-					)}
+					<HeaderReservation title={title} />
+					<ResourceDetailsReservation
+						resource={resource}
+						isResourceLoading={isResourceLoading}
+						showForm={showForm}
+						schedule={schedule}
+					>
+						{showSelectHour ? (
+							<CalendarSelectSlot
+								date={{ from: defaultDate?.from, to: defaultDate?.to }}
+								resourceId={resource.id}
+								setShowSelectHour={setShowSelectHour}
+								setShowForm={setShowForm}
+								setSchedule={setSchedule}
+							/>
+						) : (
+							<ReservationForm schedule={schedule} />
+						)}
+					</ResourceDetailsReservation>
 				</>
 			) : (
-				<>
-					{resource ? (
-						<>
-							<HeaderReservation title={title} />
-							<ResourceDetailsReservation
-								resource={resource}
-								isResourceLoading={isResourceLoading}
-								showForm={showForm}
-							/>
-						</>
-					) : (
-						<UserDoesntExist />
-					)}
-				</>
+				<UserDoesntExist />
 			)}
 		</>
 	);

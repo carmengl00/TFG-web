@@ -1,4 +1,6 @@
 import { generateRandomColor } from '@/utils/generateRandomColor';
+import { format } from 'date-fns';
+import { es } from 'date-fns/locale';
 import { CalendarDays, Clock9, Info, MapPin } from 'lucide-react';
 
 interface ResourceDetailsReservationProps {
@@ -21,6 +23,7 @@ interface ResourceDetailsReservationProps {
 	isResourceLoading: boolean;
 	showForm: boolean;
 	children?: React.ReactNode;
+	schedule: Schedule | undefined;
 }
 
 const ResourceDetailsReservation = ({
@@ -28,6 +31,7 @@ const ResourceDetailsReservation = ({
 	isResourceLoading,
 	showForm,
 	children,
+	schedule,
 }: ResourceDetailsReservationProps) => {
 	const cardColor = generateRandomColor();
 	return (
@@ -64,10 +68,14 @@ const ResourceDetailsReservation = ({
 								</div>
 							</div>
 						)}
-						{showForm && (
+						{showForm && schedule && (
 							<div className="mt-10 flex flex-row">
 								<CalendarDays />
-								<div className="text-xl ml-4">Fecha: x</div>
+								<div className="text-xl ml-4">
+									{format(schedule.day, "d 'de' MMMM", { locale: es })},{' '}
+									{schedule.startTime.slice(0, -3)} -{' '}
+									{schedule.endTime.slice(0, -3)}
+								</div>
 							</div>
 						)}
 					</div>
