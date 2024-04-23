@@ -1,0 +1,15 @@
+mutation createReservedSlot($input:CreateReservedSlotInput!){
+    createReservedSlot(input:$input){
+        resource{
+            name
+            description
+            availableTime
+            location
+        }
+        name
+        description
+        email
+        startTime
+        endTime
+        }
+}

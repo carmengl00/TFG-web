@@ -1,4 +1,9 @@
+import { paths } from '@/globals/paths';
+import { useSlotsActions } from '@/graphql/hooks/slots/useSlotsActions';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { format } from 'date-fns';
+import { es } from 'date-fns/locale';
+import { useRouter } from 'next/router';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { Button } from '../ui/button';
@@ -16,16 +21,41 @@ import { FormSchema } from './constants';
 
 interface ReservationFormProps {
 	schedule: Schedule | undefined;
+	resourceId: string;
 }
 
-export const ReservationForm = ({ schedule }: ReservationFormProps) => {
+export const ReservationForm = ({
+	schedule,
+	resourceId,
+}: ReservationFormProps) => {
+	const { createReservedSlot } = useSlotsActions();
 	const form = useForm<z.infer<typeof FormSchema>>({
 		resolver: zodResolver(FormSchema),
 	});
 
-	function onSubmit(values: z.infer<typeof FormSchema>) {
-		console.log(values);
-	}
+	const { push } = useRouter();
+
+	const onSubmit = async (data: z.infer<typeof FormSchema>) => {
+		try {
+			if (schedule) {
+				const formattedDay = format(new Date(schedule.day), 'yyyy-MM-dd', {
+					locale: es,
+				});
+				const response = await createReservedSlot({
+					resourceId: resourceId,
+					name: data.name,
+					description: data.description,
+					email: data.email,
+					day: formattedDay,
+					startTime: schedule?.startTime,
+					endTime: schedule?.endTime,
+				});
+				if (response) await push(paths.public.home);
+			}
+		} catch (e) {
+			console.log(e);
+		}
+	};
 
 	return (
 		<Form {...form}>

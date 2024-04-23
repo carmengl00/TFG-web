@@ -43,6 +43,16 @@ export type CreateOrUpdateAvailabilityInput = {
 	resourceId: Scalars['UUID']['input'];
 };
 
+export type CreateReservedSlotInput = {
+	day: Scalars['Date']['input'];
+	description: Scalars['String']['input'];
+	email: Scalars['String']['input'];
+	endTime: Scalars['Time']['input'];
+	name: Scalars['String']['input'];
+	resourceId: Scalars['UUID']['input'];
+	startTime: Scalars['Time']['input'];
+};
+
 export type DayAvailabilityGroupType = {
 	availabilities: Array<DayAvailabilityType>;
 	day: Scalars['Date']['output'];
@@ -94,6 +104,8 @@ export type Mutation = {
 	/** Creates or updates day availability */
 	createOrUpdateAvailability: Scalars['Boolean']['output'];
 	/** Creates a resource */
+	createReservedSlot: ReservedSlotType;
+	/** Creates a resource */
 	createResource: ResourceType;
 	/** Deletes all availabilities from a resource */
 	deleteAllAvailabilities: Scalars['Boolean']['output'];
@@ -118,6 +130,10 @@ export type MutationChangePasswordArgs = {
 
 export type MutationCreateOrUpdateAvailabilityArgs = {
 	input: CreateOrUpdateAvailabilityInput;
+};
+
+export type MutationCreateReservedSlotArgs = {
+	input: CreateReservedSlotInput;
 };
 
 export type MutationCreateResourceArgs = {
@@ -247,10 +263,10 @@ export type RequestResetPasswordInput = {
 export type ReservedSlotType = {
 	description: Scalars['String']['output'];
 	email: Scalars['String']['output'];
-	endTime: Scalars['Time']['output'];
+	endTime: Scalars['DateTime']['output'];
 	name: Scalars['String']['output'];
 	resource: ResourceType;
-	startTime: Scalars['Time']['output'];
+	startTime: Scalars['DateTime']['output'];
 };
 
 export type ResetPasswordInput = {
@@ -423,6 +439,26 @@ export type UpdateResourceMutation = {
 			email: string;
 			publicName: string;
 			created: string;
+		};
+	};
+};
+
+export type CreateReservedSlotMutationVariables = Exact<{
+	input: CreateReservedSlotInput;
+}>;
+
+export type CreateReservedSlotMutation = {
+	createReservedSlot: {
+		name: string;
+		description: string;
+		email: string;
+		startTime: string;
+		endTime: string;
+		resource: {
+			name: string;
+			description: string;
+			availableTime: number;
+			location?: string | undefined;
 		};
 	};
 };
@@ -1018,6 +1054,86 @@ export const UpdateResourceDocument = {
 } as unknown as DocumentNode<
 	UpdateResourceMutation,
 	UpdateResourceMutationVariables
+>;
+export const CreateReservedSlotDocument = {
+	kind: 'Document',
+	definitions: [
+		{
+			kind: 'OperationDefinition',
+			operation: 'mutation',
+			name: { kind: 'Name', value: 'createReservedSlot' },
+			variableDefinitions: [
+				{
+					kind: 'VariableDefinition',
+					variable: {
+						kind: 'Variable',
+						name: { kind: 'Name', value: 'input' },
+					},
+					type: {
+						kind: 'NonNullType',
+						type: {
+							kind: 'NamedType',
+							name: { kind: 'Name', value: 'CreateReservedSlotInput' },
+						},
+					},
+				},
+			],
+			selectionSet: {
+				kind: 'SelectionSet',
+				selections: [
+					{
+						kind: 'Field',
+						name: { kind: 'Name', value: 'createReservedSlot' },
+						arguments: [
+							{
+								kind: 'Argument',
+								name: { kind: 'Name', value: 'input' },
+								value: {
+									kind: 'Variable',
+									name: { kind: 'Name', value: 'input' },
+								},
+							},
+						],
+						selectionSet: {
+							kind: 'SelectionSet',
+							selections: [
+								{
+									kind: 'Field',
+									name: { kind: 'Name', value: 'resource' },
+									selectionSet: {
+										kind: 'SelectionSet',
+										selections: [
+											{ kind: 'Field', name: { kind: 'Name', value: 'name' } },
+											{
+												kind: 'Field',
+												name: { kind: 'Name', value: 'description' },
+											},
+											{
+												kind: 'Field',
+												name: { kind: 'Name', value: 'availableTime' },
+											},
+											{
+												kind: 'Field',
+												name: { kind: 'Name', value: 'location' },
+											},
+										],
+									},
+								},
+								{ kind: 'Field', name: { kind: 'Name', value: 'name' } },
+								{ kind: 'Field', name: { kind: 'Name', value: 'description' } },
+								{ kind: 'Field', name: { kind: 'Name', value: 'email' } },
+								{ kind: 'Field', name: { kind: 'Name', value: 'startTime' } },
+								{ kind: 'Field', name: { kind: 'Name', value: 'endTime' } },
+							],
+						},
+					},
+				],
+			},
+		},
+	],
+} as unknown as DocumentNode<
+	CreateReservedSlotMutation,
+	CreateReservedSlotMutationVariables
 >;
 export const MyDailyAvailabilityDocument = {
 	kind: 'Document',

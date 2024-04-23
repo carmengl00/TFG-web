@@ -9,6 +9,16 @@ input CreateOrUpdateAvailabilityInput {
   resourceId: UUID!
 }
 
+input CreateReservedSlotInput {
+  day: Date!
+  description: String!
+  email: String!
+  endTime: Time!
+  name: String!
+  resourceId: UUID!
+  startTime: Time!
+}
+
 """
 Date (isoformat)
 """
@@ -72,6 +82,11 @@ type Mutation {
   Creates or updates day availability
   """
   createOrUpdateAvailability(input: CreateOrUpdateAvailabilityInput!): Boolean!
+
+  """
+  Creates a resource
+  """
+  createReservedSlot(input: CreateReservedSlotInput!): ReservedSlotType!
 
   """
   Creates a resource
@@ -184,10 +199,10 @@ input RequestResetPasswordInput {
 type ReservedSlotType {
   description: String!
   email: String!
-  endTime: Time!
+  endTime: DateTime!
   name: String!
   resource: ResourceType!
-  startTime: Time!
+  startTime: DateTime!
 }
 
 input ResetPasswordInput {
