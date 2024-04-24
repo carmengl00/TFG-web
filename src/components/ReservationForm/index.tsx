@@ -3,6 +3,7 @@ import { useSlotsActions } from '@/graphql/hooks/slots/useSlotsActions';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { format } from 'date-fns';
 import { es } from 'date-fns/locale';
+import { ChevronLeft } from 'lucide-react';
 import { useRouter } from 'next/router';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
@@ -22,11 +23,15 @@ import { FormSchema } from './constants';
 interface ReservationFormProps {
 	schedule: Schedule | undefined;
 	resourceId: string;
+	setShowSelectHour: React.Dispatch<React.SetStateAction<boolean>>;
+	setSchedule: React.Dispatch<React.SetStateAction<Schedule | undefined>>;
 }
 
 export const ReservationForm = ({
 	schedule,
 	resourceId,
+	setShowSelectHour,
+	setSchedule,
 }: ReservationFormProps) => {
 	const { createReservedSlot } = useSlotsActions();
 	const form = useForm<z.infer<typeof FormSchema>>({
@@ -55,6 +60,11 @@ export const ReservationForm = ({
 		} catch (e) {
 			console.log(e);
 		}
+	};
+
+	const handleBack = () => {
+		setShowSelectHour(true);
+		setSchedule(undefined);
 	};
 
 	return (
@@ -122,9 +132,14 @@ export const ReservationForm = ({
 							)}
 						/>
 					</div>
-					<Button className="mt-10 w-32 self-center" type="submit">
-						Reservar
-					</Button>
+					<div className="flex flex-row mt-10 justify-between items-center">
+						<ChevronLeft className="ml-10" type="button" onClick={handleBack} />
+						<div className="flex justify-center flex-grow">
+							<Button className="mr-12 w-32" type="submit">
+								Reservar
+							</Button>
+						</div>
+					</div>
 				</div>
 			</form>
 		</Form>
