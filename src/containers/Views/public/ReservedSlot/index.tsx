@@ -2,6 +2,7 @@ import CalendarSelectSlot from '@/components/CalendarSelectSlot';
 import HeaderReservation from '@/components/HeaderReservation';
 import { ReservationForm } from '@/components/ReservationForm';
 import ResourceDetailsReservation from '@/components/ResourceDetailsReservation';
+import { Summary } from '@/components/Summary';
 import { UserDoesntExist } from '@/components/UserDoesntExist';
 import { useResource } from '@/graphql/hooks/myResources/useResource';
 import { addDays } from 'date-fns';
@@ -22,6 +23,8 @@ export function ReservedSlotView() {
 	const title = `${resource?.user.firstName} ${resource?.user.lastName}`;
 	const [showSelectHour, setShowSelectHour] = useState<boolean>(true);
 	const [showForm, setShowForm] = useState<boolean>(false);
+	const [showSummary, setShowSummary] = useState<boolean>(false);
+	const [dataReservation, setDataReservation] = useState<DataReservation>();
 
 	const [schedule, setSchedule] = useState<Schedule>();
 
@@ -33,10 +36,11 @@ export function ReservedSlotView() {
 					<ResourceDetailsReservation
 						resource={resource}
 						isResourceLoading={isResourceLoading}
+						showSummary={showSummary}
 						showForm={showForm}
 						schedule={schedule}
 					>
-						{showSelectHour ? (
+						{showSelectHour && (
 							<CalendarSelectSlot
 								date={{ from: defaultDate?.from, to: defaultDate?.to }}
 								resourceId={resource.id}
@@ -44,13 +48,20 @@ export function ReservedSlotView() {
 								setShowForm={setShowForm}
 								setSchedule={setSchedule}
 							/>
-						) : (
+						)}
+						{showForm && (
 							<ReservationForm
 								schedule={schedule}
 								resourceId={resource.id}
 								setShowSelectHour={setShowSelectHour}
 								setSchedule={setSchedule}
+								setShowSummary={setShowSummary}
+								setShowForm={setShowForm}
+								setDataReservation={setDataReservation}
 							/>
+						)}
+						{showSummary && dataReservation && (
+							<Summary dataReservation={dataReservation} />
 						)}
 					</ResourceDetailsReservation>
 				</>

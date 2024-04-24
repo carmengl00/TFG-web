@@ -25,6 +25,11 @@ interface ReservationFormProps {
 	resourceId: string;
 	setShowSelectHour: React.Dispatch<React.SetStateAction<boolean>>;
 	setSchedule: React.Dispatch<React.SetStateAction<Schedule | undefined>>;
+	setShowSummary: React.Dispatch<React.SetStateAction<boolean>>;
+	setShowForm: React.Dispatch<React.SetStateAction<boolean>>;
+	setDataReservation: React.Dispatch<
+		React.SetStateAction<DataReservation | undefined>
+	>;
 }
 
 export const ReservationForm = ({
@@ -32,13 +37,14 @@ export const ReservationForm = ({
 	resourceId,
 	setShowSelectHour,
 	setSchedule,
+	setShowSummary,
+	setShowForm,
+	setDataReservation,
 }: ReservationFormProps) => {
 	const { createReservedSlot } = useSlotsActions();
 	const form = useForm<z.infer<typeof FormSchema>>({
 		resolver: zodResolver(FormSchema),
 	});
-
-	const { push } = useRouter();
 
 	const onSubmit = async (data: z.infer<typeof FormSchema>) => {
 		try {
@@ -55,7 +61,16 @@ export const ReservationForm = ({
 					startTime: schedule?.startTime,
 					endTime: schedule?.endTime,
 				});
-				if (response) await push(paths.public.home);
+				if (response) {
+					setShowForm(false);
+					setShowSummary(true);
+					setDataReservation({
+						name: data.name,
+						description: data.description,
+						email: data.email,
+					});
+					setSchedule(schedule);
+				}
 			}
 		} catch (e) {
 			console.log(e);

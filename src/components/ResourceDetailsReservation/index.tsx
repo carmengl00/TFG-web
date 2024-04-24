@@ -24,6 +24,7 @@ interface ResourceDetailsReservationProps {
 	showForm: boolean;
 	children?: React.ReactNode;
 	schedule: Schedule | undefined;
+	showSummary: boolean;
 }
 
 const ResourceDetailsReservation = ({
@@ -32,8 +33,10 @@ const ResourceDetailsReservation = ({
 	showForm,
 	children,
 	schedule,
+	showSummary,
 }: ResourceDetailsReservationProps) => {
 	const cardColor = generateRandomColor();
+	console.log(schedule);
 	return (
 		<div className="flex justify-center items-center h-screen">
 			<div
@@ -68,16 +71,17 @@ const ResourceDetailsReservation = ({
 								</div>
 							</div>
 						)}
-						{showForm && schedule && (
-							<div className="mt-10 flex flex-row">
-								<CalendarDays />
-								<div className="text-xl ml-4">
-									{format(schedule.day, "d 'de' MMMM", { locale: es })},{' '}
-									{schedule.startTime.slice(0, -3)} -{' '}
-									{schedule.endTime.slice(0, -3)}
+						{showForm ||
+							(showSummary && schedule && (
+								<div className="mt-10 flex flex-row">
+									<CalendarDays />
+									<div className="text-xl ml-4">
+										{format(schedule.day, "d 'de' MMMM", { locale: es })},{' '}
+										{schedule.startTime.slice(0, -3)} -{' '}
+										{schedule.endTime.slice(0, -3)}
+									</div>
 								</div>
-							</div>
-						)}
+							))}
 					</div>
 				)}
 				{children}

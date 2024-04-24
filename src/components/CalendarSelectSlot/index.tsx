@@ -27,6 +27,7 @@ const CalendarSelectSlot = ({
 	const startDate = date.from;
 	const endDate = date.to;
 	const [selectedDay, setSelectedDay] = useState<SelectedDaySlot>();
+	const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
 	const getPossibleSlots = async (day: Date): Promise<SelectedDaySlot> => {
 		const formattedDay = format(day, 'yyyy-MM-dd');
@@ -83,7 +84,7 @@ const CalendarSelectSlot = ({
 			setShowSelectHour(false);
 			setShowForm(true);
 		} else {
-			console.error('No se ha seleccionado un día o un slot.');
+			setErrorMessage('No se ha seleccionado un día o un horario.');
 		}
 	};
 
@@ -154,6 +155,7 @@ const CalendarSelectSlot = ({
 				<Button className="mt-10" type="submit" onClick={onClick}>
 					Guardar
 				</Button>
+				{errorMessage && <p className="mt-5 text-red-600">{errorMessage}</p>}
 			</div>
 		</div>
 	);
