@@ -1,4 +1,5 @@
 import { paths } from '@/globals/paths';
+import { useAuthActions } from '@/graphql/auth/useAuthActions';
 import { cn } from '@/lib/utils';
 import {
 	CalendarClock,
@@ -20,6 +21,8 @@ interface MenuProps {
 
 const Menu = ({ resourcesNumber }: MenuProps) => {
 	const router = useRouter();
+
+	const { handleLogout } = useAuthActions();
 
 	const getLinkVariant = (path: string) => {
 		if (router.pathname === path) {
@@ -84,8 +87,9 @@ const Menu = ({ resourcesNumber }: MenuProps) => {
 						{
 							title: 'Cerrar sesión',
 							icon: LogOutIcon,
-							variant: getLinkVariant(paths.public.home),
-							href: paths.public.home,
+							variant: getLinkVariant(paths.public.signIn),
+							href: paths.public.signIn,
+							onClick: handleLogout,
 						},
 					]}
 				/>

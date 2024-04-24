@@ -10,6 +10,9 @@ import {
 	LoginDocument,
 	LoginMutation,
 	LoginMutationVariables,
+	LogoutDocument,
+	LogoutMutation,
+	LogoutMutationVariables,
 } from '../generated/types';
 import { resetTokens, storeTokens, updateAuthVar } from './utils';
 
@@ -23,6 +26,11 @@ export const useAuthActions = () => {
 		LoginMutation,
 		LoginMutationVariables
 	>(LoginDocument);
+
+	const [performLogout, { loading: isLogoutLoading }] = useMutation<
+		LogoutMutation,
+		LogoutMutationVariables
+	>(LogoutDocument);
 
 	const handleRegister = useCallback(
 		async (input: RegisterMutationVariables['input']) => {
@@ -66,10 +74,26 @@ export const useAuthActions = () => {
 		[performLogin]
 	);
 
+	const handleLogout = useCallback(async () => {
+		performLogout()
+			.then(() => {
+				resetTokens();
+				window.location.reload();
+			})
+			.catch((e) => {
+				console.error('Error during logout:', e);
+				if (e instanceof ApolloError) {
+					throw e;
+				}
+			});
+	}, [performLogout]);
+
 	return {
 		handleRegister,
 		isRegisterLoading,
 		handleLogin,
 		isLoginLoading,
+		handleLogout,
+		isLogoutLoading,
 	};
 };
