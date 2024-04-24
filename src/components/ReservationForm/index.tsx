@@ -115,7 +115,7 @@ export const ReservationForm = ({
 										<Input type="text" {...field} />
 									</FormControl>
 									<FormDescription>
-										Indica los detalles de la reserva (opcional)
+										Indica los detalles de la reserva.
 									</FormDescription>
 									<FormMessage />
 								</FormItem>
