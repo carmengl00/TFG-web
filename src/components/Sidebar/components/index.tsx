@@ -13,6 +13,7 @@ interface NavProps {
 		icon: LucideIcon;
 		variant: 'default' | 'ghost';
 		href: string;
+		onClick?: () => void;
 	}[];
 }
 
@@ -25,6 +26,7 @@ export function Nav({ links }: NavProps) {
 						// biome-ignore lint/suspicious/noArrayIndexKey: <explanation>
 						key={index}
 						href={link.href}
+						onClick={link.onClick}
 						className={cn(
 							buttonVariants({ variant: link.variant, size: 'sm' }),
 							link.variant === 'default' &&

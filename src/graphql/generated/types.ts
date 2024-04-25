@@ -352,6 +352,10 @@ export type LoginMutation = {
 	};
 };
 
+export type LogoutMutationVariables = Exact<{ [key: string]: never }>;
+
+export type LogoutMutation = { logout: boolean };
+
 export type RegisterMutationVariables = Exact<{
 	input: RegisterInput;
 }>;
@@ -642,6 +646,22 @@ export const LoginDocument = {
 		},
 	],
 } as unknown as DocumentNode<LoginMutation, LoginMutationVariables>;
+export const LogoutDocument = {
+	kind: 'Document',
+	definitions: [
+		{
+			kind: 'OperationDefinition',
+			operation: 'mutation',
+			name: { kind: 'Name', value: 'logout' },
+			selectionSet: {
+				kind: 'SelectionSet',
+				selections: [
+					{ kind: 'Field', name: { kind: 'Name', value: 'logout' } },
+				],
+			},
+		},
+	],
+} as unknown as DocumentNode<LogoutMutation, LogoutMutationVariables>;
 export const RegisterDocument = {
 	kind: 'Document',
 	definitions: [
