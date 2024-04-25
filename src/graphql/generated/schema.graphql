@@ -200,6 +200,7 @@ type ReservedSlotType {
   description: String!
   email: String!
   endTime: DateTime!
+  id: String!
   name: String!
   resource: ResourceType!
   startTime: DateTime!

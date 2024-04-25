@@ -264,6 +264,7 @@ export type ReservedSlotType = {
 	description: Scalars['String']['output'];
 	email: Scalars['String']['output'];
 	endTime: Scalars['DateTime']['output'];
+	id: Scalars['String']['output'];
 	name: Scalars['String']['output'];
 	resource: ResourceType;
 	startTime: Scalars['DateTime']['output'];
@@ -548,6 +549,30 @@ export type GetSlotsQueryVariables = Exact<{
 
 export type GetSlotsQuery = {
 	getSlots: Array<{ startTime: string; endTime: string; reserved: boolean }>;
+};
+
+export type MyReservedSlotsQueryVariables = Exact<{
+	pagination?: InputMaybe<PaginationInput>;
+}>;
+
+export type MyReservedSlotsQuery = {
+	myReservedSlots: {
+		pageInfo: {
+			page: number;
+			pages: number;
+			hasNext: boolean;
+			hasPrev: boolean;
+			totalResults: number;
+		};
+		edges: Array<{
+			id: string;
+			name: string;
+			description: string;
+			email: string;
+			startTime: string;
+			endTime: string;
+		}>;
+	};
 };
 
 export type GetMeQueryVariables = Exact<{ [key: string]: never }>;
@@ -1555,6 +1580,103 @@ export const GetSlotsDocument = {
 		},
 	],
 } as unknown as DocumentNode<GetSlotsQuery, GetSlotsQueryVariables>;
+export const MyReservedSlotsDocument = {
+	kind: 'Document',
+	definitions: [
+		{
+			kind: 'OperationDefinition',
+			operation: 'query',
+			name: { kind: 'Name', value: 'myReservedSlots' },
+			variableDefinitions: [
+				{
+					kind: 'VariableDefinition',
+					variable: {
+						kind: 'Variable',
+						name: { kind: 'Name', value: 'pagination' },
+					},
+					type: {
+						kind: 'NamedType',
+						name: { kind: 'Name', value: 'PaginationInput' },
+					},
+				},
+			],
+			selectionSet: {
+				kind: 'SelectionSet',
+				selections: [
+					{
+						kind: 'Field',
+						name: { kind: 'Name', value: 'myReservedSlots' },
+						arguments: [
+							{
+								kind: 'Argument',
+								name: { kind: 'Name', value: 'pagination' },
+								value: {
+									kind: 'Variable',
+									name: { kind: 'Name', value: 'pagination' },
+								},
+							},
+						],
+						selectionSet: {
+							kind: 'SelectionSet',
+							selections: [
+								{
+									kind: 'Field',
+									name: { kind: 'Name', value: 'pageInfo' },
+									selectionSet: {
+										kind: 'SelectionSet',
+										selections: [
+											{ kind: 'Field', name: { kind: 'Name', value: 'page' } },
+											{ kind: 'Field', name: { kind: 'Name', value: 'pages' } },
+											{
+												kind: 'Field',
+												name: { kind: 'Name', value: 'hasNext' },
+											},
+											{
+												kind: 'Field',
+												name: { kind: 'Name', value: 'hasPrev' },
+											},
+											{
+												kind: 'Field',
+												name: { kind: 'Name', value: 'totalResults' },
+											},
+										],
+									},
+								},
+								{
+									kind: 'Field',
+									name: { kind: 'Name', value: 'edges' },
+									selectionSet: {
+										kind: 'SelectionSet',
+										selections: [
+											{ kind: 'Field', name: { kind: 'Name', value: 'id' } },
+											{ kind: 'Field', name: { kind: 'Name', value: 'name' } },
+											{
+												kind: 'Field',
+												name: { kind: 'Name', value: 'description' },
+											},
+											{ kind: 'Field', name: { kind: 'Name', value: 'email' } },
+											{
+												kind: 'Field',
+												name: { kind: 'Name', value: 'startTime' },
+											},
+											{
+												kind: 'Field',
+												name: { kind: 'Name', value: 'endTime' },
+											},
+										],
+									},
+								},
+							],
+						},
+					},
+				],
+			},
+		},
+	],
+} as unknown as DocumentNode<
+	MyReservedSlotsQuery,
+	MyReservedSlotsQueryVariables
+>;
 export const GetMeDocument = {
 	kind: 'Document',
 	definitions: [

@@ -6,7 +6,7 @@ import { SkipForward } from 'lucide-react';
 import { useConnect } from './connect';
 
 export function MyResourcesView() {
-	const { resources, loadMore } = useConnect();
+	const { resources, loadMore, reservedSlots } = useConnect();
 
 	return (
 		<>
@@ -15,6 +15,11 @@ export function MyResourcesView() {
 					<Menu
 						resourcesNumber={
 							resources.pageInfo ? resources.pageInfo.totalResults || 0 : 0
+						}
+						reservedSlotsNumber={
+							reservedSlots.pageInfo
+								? reservedSlots.pageInfo.totalResults || 0
+								: 0
 						}
 					/>
 				</div>
