@@ -53,7 +53,10 @@ export const useMyReservedSlots = ({
 	return {
 		isLoading: isLoading || isMeLoading,
 		reservedSlots: {
-			edges: data?.myReservedSlots.edges,
+			edges: myReservedSlots.filter(
+				({ id }, index, self) =>
+					index === self.findIndex(({ id: findId }) => findId === id)
+			),
 			pageInfo: data?.myReservedSlots.pageInfo,
 		},
 		loadMore: loadMore,

@@ -571,6 +571,7 @@ export type MyReservedSlotsQuery = {
 			email: string;
 			startTime: string;
 			endTime: string;
+			resource: { name: string };
 		}>;
 	};
 };
@@ -1648,6 +1649,19 @@ export const MyReservedSlotsDocument = {
 									selectionSet: {
 										kind: 'SelectionSet',
 										selections: [
+											{
+												kind: 'Field',
+												name: { kind: 'Name', value: 'resource' },
+												selectionSet: {
+													kind: 'SelectionSet',
+													selections: [
+														{
+															kind: 'Field',
+															name: { kind: 'Name', value: 'name' },
+														},
+													],
+												},
+											},
 											{ kind: 'Field', name: { kind: 'Name', value: 'id' } },
 											{ kind: 'Field', name: { kind: 'Name', value: 'name' } },
 											{

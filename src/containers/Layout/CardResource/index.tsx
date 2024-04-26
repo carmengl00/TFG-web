@@ -29,7 +29,7 @@ export const CardResource = ({
 	id,
 }: CardResourceProps) => {
 	const cardColor = generateRandomColor();
-	const reservationPath = paths.reservation
+	const reservationPath = paths.public.reservation
 		.replace('[publicName]', publicName)
 		.replace('[id]', id);
 

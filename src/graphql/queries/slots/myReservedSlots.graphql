@@ -12,6 +12,10 @@ query myReservedSlots(
       totalResults
     }
     edges{
+      resource{
+        name
+      }
+      id
       name
       description
       email
