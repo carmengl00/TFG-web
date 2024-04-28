@@ -1,0 +1,3 @@
+mutation deleteReservedSlot($id: UUID!) {
+    deleteReservedSlot(id:$id)
+}

@@ -11,19 +11,17 @@ export const useConnect = () => {
 		pollInterval: POLL_INTERVAL,
 	});
 
-	const { reservedSlots, loadMore: loadMoreReservedSlots } = useMyReservedSlots(
-		{
-			pagination: {
-				page: 1,
-				pageSize: PAGE_SIZE,
-			},
-			pollInterval: POLL_INTERVAL,
-		}
-	);
+	const { reservedSlots, loadMore } = useMyReservedSlots({
+		pagination: {
+			page: 1,
+			pageSize: PAGE_SIZE,
+		},
+		pollInterval: POLL_INTERVAL,
+	});
 
 	return {
 		resources,
 		reservedSlots,
-		loadMoreReservedSlots,
+		loadMore,
 	};
 };

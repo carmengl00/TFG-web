@@ -84,7 +84,7 @@ type Mutation {
   createOrUpdateAvailability(input: CreateOrUpdateAvailabilityInput!): Boolean!
 
   """
-  Creates a resource
+  Creates a reserved slot
   """
   createReservedSlot(input: CreateReservedSlotInput!): ReservedSlotType!
 
@@ -102,6 +102,11 @@ type Mutation {
   Delete a day availability
   """
   deleteDayAvailability(id: UUID!): Boolean!
+
+  """
+  Deletes a reserved slot
+  """
+  deleteReservedSlot(id: UUID!): Boolean!
 
   """
   Delete your resource

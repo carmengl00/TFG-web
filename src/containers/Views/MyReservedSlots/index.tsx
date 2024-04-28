@@ -6,7 +6,7 @@ import { SkipForward } from 'lucide-react';
 import { useConnect } from './connect';
 
 export function MyReservedSlotsView() {
-	const { resources, reservedSlots, loadMoreReservedSlots } = useConnect();
+	const { resources, reservedSlots, loadMore } = useConnect();
 
 	return (
 		<>
@@ -36,7 +36,7 @@ export function MyReservedSlotsView() {
 							endTime={reservedSlot.endTime}
 						/>
 					))}
-					<Button onClick={loadMoreReservedSlots} className="ml-5 mt-5">
+					<Button onClick={loadMore} className="ml-5 mt-5">
 						<SkipForward />
 					</Button>
 				</div>

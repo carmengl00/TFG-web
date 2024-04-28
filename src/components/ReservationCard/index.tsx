@@ -1,6 +1,6 @@
+import { useSlotsActions } from '@/graphql/hooks/slots/useSlotsActions';
 import { showFormatedTimes } from '@/utils/showFormattedTimes';
-import { CalendarDays, CircleIcon, Settings2, Trash2Icon } from 'lucide-react';
-import { Button } from '../ui/button';
+import { CalendarDays, CircleIcon, Trash2Icon } from 'lucide-react';
 import {
 	Card,
 	CardContent,
@@ -28,6 +28,8 @@ const ReservationCard = ({
 }: ReservationCardProps) => {
 	const currentDate = new Date();
 	const startDate = new Date(startTime);
+
+	const { deleteReservedSlot } = useSlotsActions();
 	return (
 		<div className="mt-10">
 			<Card className="w-11/12 ml-5">
@@ -48,7 +50,7 @@ const ReservationCard = ({
 						</CardDescription>
 					</div>
 					<div className="flex items-center space-x-1 text-secondary-foreground">
-						<Trash2Icon />
+						<Trash2Icon onClick={() => deleteReservedSlot(id)} />
 					</div>
 				</CardHeader>
 				<CardContent>

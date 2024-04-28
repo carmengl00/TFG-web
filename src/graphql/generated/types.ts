@@ -103,7 +103,7 @@ export type Mutation = {
 	changePassword: Scalars['Boolean']['output'];
 	/** Creates or updates day availability */
 	createOrUpdateAvailability: Scalars['Boolean']['output'];
-	/** Creates a resource */
+	/** Creates a reserved slot */
 	createReservedSlot: ReservedSlotType;
 	/** Creates a resource */
 	createResource: ResourceType;
@@ -111,6 +111,8 @@ export type Mutation = {
 	deleteAllAvailabilities: Scalars['Boolean']['output'];
 	/** Delete a day availability */
 	deleteDayAvailability: Scalars['Boolean']['output'];
+	/** Deletes a reserved slot */
+	deleteReservedSlot: Scalars['Boolean']['output'];
 	/** Delete your resource */
 	deleteResource: Scalars['Boolean']['output'];
 	getUploadUrl: MediaUploadUrlType;
@@ -145,6 +147,10 @@ export type MutationDeleteAllAvailabilitiesArgs = {
 };
 
 export type MutationDeleteDayAvailabilityArgs = {
+	id: Scalars['UUID']['input'];
+};
+
+export type MutationDeleteReservedSlotArgs = {
 	id: Scalars['UUID']['input'];
 };
 
@@ -467,6 +473,12 @@ export type CreateReservedSlotMutation = {
 		};
 	};
 };
+
+export type DeleteReservedSlotMutationVariables = Exact<{
+	id: Scalars['UUID']['input'];
+}>;
+
+export type DeleteReservedSlotMutation = { deleteReservedSlot: boolean };
 
 export type MyDailyAvailabilityQueryVariables = Exact<{
 	input: MonthInput;
@@ -1180,6 +1192,48 @@ export const CreateReservedSlotDocument = {
 } as unknown as DocumentNode<
 	CreateReservedSlotMutation,
 	CreateReservedSlotMutationVariables
+>;
+export const DeleteReservedSlotDocument = {
+	kind: 'Document',
+	definitions: [
+		{
+			kind: 'OperationDefinition',
+			operation: 'mutation',
+			name: { kind: 'Name', value: 'deleteReservedSlot' },
+			variableDefinitions: [
+				{
+					kind: 'VariableDefinition',
+					variable: { kind: 'Variable', name: { kind: 'Name', value: 'id' } },
+					type: {
+						kind: 'NonNullType',
+						type: { kind: 'NamedType', name: { kind: 'Name', value: 'UUID' } },
+					},
+				},
+			],
+			selectionSet: {
+				kind: 'SelectionSet',
+				selections: [
+					{
+						kind: 'Field',
+						name: { kind: 'Name', value: 'deleteReservedSlot' },
+						arguments: [
+							{
+								kind: 'Argument',
+								name: { kind: 'Name', value: 'id' },
+								value: {
+									kind: 'Variable',
+									name: { kind: 'Name', value: 'id' },
+								},
+							},
+						],
+					},
+				],
+			},
+		},
+	],
+} as unknown as DocumentNode<
+	DeleteReservedSlotMutation,
+	DeleteReservedSlotMutationVariables
 >;
 export const MyDailyAvailabilityDocument = {
 	kind: 'Document',
