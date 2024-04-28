@@ -2,8 +2,11 @@ import {
 	CreateReservedSlotDocument,
 	CreateReservedSlotMutation,
 	CreateReservedSlotMutationVariables,
+	DeleteReservedSlotDocument,
+	DeleteReservedSlotMutation,
+	DeleteReservedSlotMutationVariables,
 } from '@/graphql/generated/types';
-import { useMutation } from '@apollo/client';
+import { ApolloError, useMutation } from '@apollo/client';
 import { useCallback } from 'react';
 
 export function useSlotsActions() {
@@ -11,6 +14,11 @@ export function useSlotsActions() {
 		CreateReservedSlotMutation,
 		CreateReservedSlotMutationVariables
 	>(CreateReservedSlotDocument);
+
+	const [performDelete] = useMutation<
+		DeleteReservedSlotMutation,
+		DeleteReservedSlotMutationVariables
+	>(DeleteReservedSlotDocument);
 
 	const createReservedSlot = useCallback(
 		async (input: CreateReservedSlotMutationVariables['input']) => {
@@ -22,8 +30,29 @@ export function useSlotsActions() {
 		[performCreate]
 	);
 
+	const deleteReservedSlot = useCallback(
+		async (id: DeleteReservedSlotMutationVariables['id']) => {
+			try {
+				const { data } = await performDelete({
+					variables: { id },
+					refetchQueries: [DeleteReservedSlotDocument],
+				});
+				if (data?.deleteReservedSlot) {
+					window.location.reload();
+					return true;
+				}
+			} catch (e) {
+				if (e instanceof ApolloError) {
+					throw e;
+				}
+			}
+		},
+		[performDelete]
+	);
+
 	return {
 		createReservedSlot,
 		isCreateLoading,
+		deleteReservedSlot,
 	};
 }

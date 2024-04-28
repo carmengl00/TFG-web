@@ -15,7 +15,7 @@ import { z } from 'zod';
 import { useConnect } from '../connect';
 
 export function MyResourcesDetailsView() {
-	const { resources } = useConnect();
+	const { resources, reservedSlots } = useConnect();
 
 	const router = useRouter();
 	const { id } = router.query;
@@ -111,6 +111,11 @@ export function MyResourcesDetailsView() {
 								resourcesNumber={
 									resources.pageInfo ? resources.pageInfo.totalResults || 0 : 0
 								}
+								reservedSlotsNumber={
+									reservedSlots.pageInfo
+										? reservedSlots.pageInfo.totalResults || 0
+										: 0
+								}
 							/>
 						</div>
 						<div className="w-full">
@@ -135,6 +140,11 @@ export function MyResourcesDetailsView() {
 								resourcesNumber={
 									resources.pageInfo ? resources.pageInfo.totalResults || 0 : 0
 								}
+								reservedSlotsNumber={
+									reservedSlots.pageInfo
+										? reservedSlots.pageInfo.totalResults || 0
+										: 0
+								}
 							/>
 						</div>
 						<div className="w-full">
@@ -156,6 +166,11 @@ export function MyResourcesDetailsView() {
 							<Menu
 								resourcesNumber={
 									resources.pageInfo ? resources.pageInfo.totalResults || 0 : 0
+								}
+								reservedSlotsNumber={
+									reservedSlots.pageInfo
+										? reservedSlots.pageInfo.totalResults || 0
+										: 0
 								}
 							/>
 						</div>

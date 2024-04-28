@@ -3,8 +3,9 @@ export const paths = {
 		signIn: '/login',
 		signUp: '/register',
 		home: '/',
+		reservation: '/[publicName]/[id]',
 	},
 	newResource: '/resource/new',
 	editResource: '/resource/[id]/edit',
-	reservation: '/[publicName]/[id]',
+	myReservedSlots: '/myReservedSlots',
 };

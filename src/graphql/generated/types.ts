@@ -103,7 +103,7 @@ export type Mutation = {
 	changePassword: Scalars['Boolean']['output'];
 	/** Creates or updates day availability */
 	createOrUpdateAvailability: Scalars['Boolean']['output'];
-	/** Creates a resource */
+	/** Creates a reserved slot */
 	createReservedSlot: ReservedSlotType;
 	/** Creates a resource */
 	createResource: ResourceType;
@@ -111,6 +111,8 @@ export type Mutation = {
 	deleteAllAvailabilities: Scalars['Boolean']['output'];
 	/** Delete a day availability */
 	deleteDayAvailability: Scalars['Boolean']['output'];
+	/** Deletes a reserved slot */
+	deleteReservedSlot: Scalars['Boolean']['output'];
 	/** Delete your resource */
 	deleteResource: Scalars['Boolean']['output'];
 	getUploadUrl: MediaUploadUrlType;
@@ -145,6 +147,10 @@ export type MutationDeleteAllAvailabilitiesArgs = {
 };
 
 export type MutationDeleteDayAvailabilityArgs = {
+	id: Scalars['UUID']['input'];
+};
+
+export type MutationDeleteReservedSlotArgs = {
 	id: Scalars['UUID']['input'];
 };
 
@@ -264,6 +270,7 @@ export type ReservedSlotType = {
 	description: Scalars['String']['output'];
 	email: Scalars['String']['output'];
 	endTime: Scalars['DateTime']['output'];
+	id: Scalars['String']['output'];
 	name: Scalars['String']['output'];
 	resource: ResourceType;
 	startTime: Scalars['DateTime']['output'];
@@ -467,6 +474,12 @@ export type CreateReservedSlotMutation = {
 	};
 };
 
+export type DeleteReservedSlotMutationVariables = Exact<{
+	id: Scalars['UUID']['input'];
+}>;
+
+export type DeleteReservedSlotMutation = { deleteReservedSlot: boolean };
+
 export type MyDailyAvailabilityQueryVariables = Exact<{
 	input: MonthInput;
 }>;
@@ -548,6 +561,31 @@ export type GetSlotsQueryVariables = Exact<{
 
 export type GetSlotsQuery = {
 	getSlots: Array<{ startTime: string; endTime: string; reserved: boolean }>;
+};
+
+export type MyReservedSlotsQueryVariables = Exact<{
+	pagination?: InputMaybe<PaginationInput>;
+}>;
+
+export type MyReservedSlotsQuery = {
+	myReservedSlots: {
+		pageInfo: {
+			page: number;
+			pages: number;
+			hasNext: boolean;
+			hasPrev: boolean;
+			totalResults: number;
+		};
+		edges: Array<{
+			id: string;
+			name: string;
+			description: string;
+			email: string;
+			startTime: string;
+			endTime: string;
+			resource: { name: string };
+		}>;
+	};
 };
 
 export type GetMeQueryVariables = Exact<{ [key: string]: never }>;
@@ -1155,6 +1193,48 @@ export const CreateReservedSlotDocument = {
 	CreateReservedSlotMutation,
 	CreateReservedSlotMutationVariables
 >;
+export const DeleteReservedSlotDocument = {
+	kind: 'Document',
+	definitions: [
+		{
+			kind: 'OperationDefinition',
+			operation: 'mutation',
+			name: { kind: 'Name', value: 'deleteReservedSlot' },
+			variableDefinitions: [
+				{
+					kind: 'VariableDefinition',
+					variable: { kind: 'Variable', name: { kind: 'Name', value: 'id' } },
+					type: {
+						kind: 'NonNullType',
+						type: { kind: 'NamedType', name: { kind: 'Name', value: 'UUID' } },
+					},
+				},
+			],
+			selectionSet: {
+				kind: 'SelectionSet',
+				selections: [
+					{
+						kind: 'Field',
+						name: { kind: 'Name', value: 'deleteReservedSlot' },
+						arguments: [
+							{
+								kind: 'Argument',
+								name: { kind: 'Name', value: 'id' },
+								value: {
+									kind: 'Variable',
+									name: { kind: 'Name', value: 'id' },
+								},
+							},
+						],
+					},
+				],
+			},
+		},
+	],
+} as unknown as DocumentNode<
+	DeleteReservedSlotMutation,
+	DeleteReservedSlotMutationVariables
+>;
 export const MyDailyAvailabilityDocument = {
 	kind: 'Document',
 	definitions: [
@@ -1555,6 +1635,116 @@ export const GetSlotsDocument = {
 		},
 	],
 } as unknown as DocumentNode<GetSlotsQuery, GetSlotsQueryVariables>;
+export const MyReservedSlotsDocument = {
+	kind: 'Document',
+	definitions: [
+		{
+			kind: 'OperationDefinition',
+			operation: 'query',
+			name: { kind: 'Name', value: 'myReservedSlots' },
+			variableDefinitions: [
+				{
+					kind: 'VariableDefinition',
+					variable: {
+						kind: 'Variable',
+						name: { kind: 'Name', value: 'pagination' },
+					},
+					type: {
+						kind: 'NamedType',
+						name: { kind: 'Name', value: 'PaginationInput' },
+					},
+				},
+			],
+			selectionSet: {
+				kind: 'SelectionSet',
+				selections: [
+					{
+						kind: 'Field',
+						name: { kind: 'Name', value: 'myReservedSlots' },
+						arguments: [
+							{
+								kind: 'Argument',
+								name: { kind: 'Name', value: 'pagination' },
+								value: {
+									kind: 'Variable',
+									name: { kind: 'Name', value: 'pagination' },
+								},
+							},
+						],
+						selectionSet: {
+							kind: 'SelectionSet',
+							selections: [
+								{
+									kind: 'Field',
+									name: { kind: 'Name', value: 'pageInfo' },
+									selectionSet: {
+										kind: 'SelectionSet',
+										selections: [
+											{ kind: 'Field', name: { kind: 'Name', value: 'page' } },
+											{ kind: 'Field', name: { kind: 'Name', value: 'pages' } },
+											{
+												kind: 'Field',
+												name: { kind: 'Name', value: 'hasNext' },
+											},
+											{
+												kind: 'Field',
+												name: { kind: 'Name', value: 'hasPrev' },
+											},
+											{
+												kind: 'Field',
+												name: { kind: 'Name', value: 'totalResults' },
+											},
+										],
+									},
+								},
+								{
+									kind: 'Field',
+									name: { kind: 'Name', value: 'edges' },
+									selectionSet: {
+										kind: 'SelectionSet',
+										selections: [
+											{
+												kind: 'Field',
+												name: { kind: 'Name', value: 'resource' },
+												selectionSet: {
+													kind: 'SelectionSet',
+													selections: [
+														{
+															kind: 'Field',
+															name: { kind: 'Name', value: 'name' },
+														},
+													],
+												},
+											},
+											{ kind: 'Field', name: { kind: 'Name', value: 'id' } },
+											{ kind: 'Field', name: { kind: 'Name', value: 'name' } },
+											{
+												kind: 'Field',
+												name: { kind: 'Name', value: 'description' },
+											},
+											{ kind: 'Field', name: { kind: 'Name', value: 'email' } },
+											{
+												kind: 'Field',
+												name: { kind: 'Name', value: 'startTime' },
+											},
+											{
+												kind: 'Field',
+												name: { kind: 'Name', value: 'endTime' },
+											},
+										],
+									},
+								},
+							],
+						},
+					},
+				],
+			},
+		},
+	],
+} as unknown as DocumentNode<
+	MyReservedSlotsQuery,
+	MyReservedSlotsQueryVariables
+>;
 export const GetMeDocument = {
 	kind: 'Document',
 	definitions: [

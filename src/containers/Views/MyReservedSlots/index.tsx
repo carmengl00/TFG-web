@@ -1,12 +1,12 @@
-import CustomCard from '@/components/Card';
 import Header from '@/components/Header';
+import ReservationCard from '@/components/ReservationCard';
 import Menu from '@/components/Sidebar';
 import { Button } from '@/components/ui/button';
 import { SkipForward } from 'lucide-react';
 import { useConnect } from './connect';
 
-export function MyResourcesView() {
-	const { resources, loadMore, reservedSlots } = useConnect();
+export function MyReservedSlotsView() {
+	const { resources, reservedSlots, loadMore } = useConnect();
 
 	return (
 		<>
@@ -24,15 +24,16 @@ export function MyResourcesView() {
 					/>
 				</div>
 				<div className="w-full">
-					<Header title="Mis recursos" />
-					{resources.edges.map((resource) => (
-						<CustomCard
-							key={resource.id}
-							id={resource.id}
-							title={resource.name}
-							startDate={new Date(resource.startDate)}
-							endDate={new Date(resource.endDate)}
-							availableTime={resource.availableTime}
+					<Header title="Próximos eventos" />
+					{reservedSlots.edges.map((reservedSlot) => (
+						<ReservationCard
+							key={reservedSlot.id}
+							id={reservedSlot.id}
+							name={reservedSlot.name}
+							email={reservedSlot.email}
+							resourceName={reservedSlot.resource.name}
+							startTime={reservedSlot.startTime}
+							endTime={reservedSlot.endTime}
 						/>
 					))}
 					<Button onClick={loadMore} className="ml-5 mt-5">

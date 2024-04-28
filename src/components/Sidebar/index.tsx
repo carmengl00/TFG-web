@@ -17,9 +17,10 @@ import { Nav } from './components';
 
 interface MenuProps {
 	resourcesNumber: number;
+	reservedSlotsNumber: number;
 }
 
-const Menu = ({ resourcesNumber }: MenuProps) => {
+const Menu = ({ resourcesNumber, reservedSlotsNumber }: MenuProps) => {
 	const router = useRouter();
 
 	const { handleLogout } = useAuthActions();
@@ -51,10 +52,10 @@ const Menu = ({ resourcesNumber }: MenuProps) => {
 						},
 						{
 							title: 'Próximos eventos',
-							label: '7',
+							label: String(reservedSlotsNumber),
 							icon: CalendarClock,
-							variant: getLinkVariant(paths.public.home),
-							href: paths.public.home,
+							variant: getLinkVariant(paths.myReservedSlots),
+							href: paths.myReservedSlots,
 						},
 						{
 							title: 'Nuevo recurso',

@@ -1,0 +1,26 @@
+query myReservedSlots(
+    $pagination: PaginationInput
+){
+  myReservedSlots(
+    pagination: $pagination
+  ){
+    pageInfo{
+      page
+      pages
+      hasNext
+      hasPrev
+      totalResults
+    }
+    edges{
+      resource{
+        name
+      }
+      id
+      name
+      description
+      email
+      startTime
+      endTime
+    }
+  }
+}
