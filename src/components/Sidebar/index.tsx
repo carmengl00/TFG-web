@@ -71,8 +71,8 @@ const Menu = ({ resourcesNumber, reservedSlotsNumber }: MenuProps) => {
 						{
 							title: 'Mi perfil',
 							icon: User,
-							variant: getLinkVariant(paths.public.home),
-							href: paths.public.home,
+							variant: getLinkVariant(paths.profile),
+							href: paths.profile,
 						},
 						{
 							title: 'Ayuda',

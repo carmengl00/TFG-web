@@ -101,7 +101,7 @@ export const ReservationForm = ({
 							name="name"
 							render={({ field }) => (
 								<FormItem>
-									<FormLabel>Name</FormLabel>
+									<FormLabel>Nombre</FormLabel>
 									<FormControl>
 										<Input type="text" {...field} />
 									</FormControl>
