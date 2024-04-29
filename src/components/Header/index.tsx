@@ -1,3 +1,5 @@
+import { paths } from '@/globals/paths';
+import Link from 'next/link';
 import { Avatar, AvatarFallback, AvatarImage } from '../ui/avatar';
 
 interface HeaderProps {
@@ -12,10 +14,12 @@ const Header = ({ title }: HeaderProps) => {
 					{title}
 				</h1>
 				<div className="mr-10">
-					<Avatar>
-						<AvatarImage src="https://github.com/shadcn.png" />
-						<AvatarFallback>Z1</AvatarFallback>
-					</Avatar>
+					<Link href={paths.public.home}>
+						<Avatar className="h-24 w-24">
+							<AvatarImage src="/images/logo.png" />
+							<AvatarFallback>Z1</AvatarFallback>
+						</Avatar>
+					</Link>
 				</div>
 			</div>
 		</div>

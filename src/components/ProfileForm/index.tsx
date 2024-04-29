@@ -1,8 +1,11 @@
 import { paths } from '@/globals/paths';
+import { useAuthActions } from '@/graphql/auth/useAuthActions';
+import { resetTokens } from '@/graphql/auth/utils';
 import { useUsersActions } from '@/graphql/hooks/users/useUsersActions';
+import { isGraphqlMessageError } from '@/utils/isGraphqlMessageError';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useRouter } from 'next/router';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { Button } from '../ui/button';
@@ -32,6 +35,9 @@ export const ProfileForm = ({
 	publicName,
 }: ProfileFormProps) => {
 	const { updateUser } = useUsersActions();
+	const { handleLogout } = useAuthActions();
+	const [emailChange, setEmailChange] = useState(false);
+	const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
 	const form = useForm<z.infer<typeof FormSchema>>({
 		resolver: zodResolver(FormSchema),
@@ -47,24 +53,34 @@ export const ProfileForm = ({
 		form.setValue('firstName', firstName);
 		form.setValue('lastName', lastName);
 		form.setValue('email', email);
-		form.setValue('publicName', publicName);
+		form.setValue('publicName', publicName.toLowerCase());
 	}, [form, firstName, lastName, email, publicName]);
 
 	const { push } = useRouter();
 
 	const onSubmit = async (data: z.infer<typeof FormSchema>) => {
-		try {
-			const response = await updateUser({
-				firstName: data.firstName,
-				lastName: data.lastName,
-				email: data.email,
-				publicName: data.publicName,
+		updateUser({
+			firstName: data.firstName,
+			lastName: data.lastName,
+			email: data.email,
+			publicName: data.publicName,
+		})
+			.then(() => {
+				if (emailChange) {
+					handleLogout();
+					push(paths.public.signIn);
+					resetTokens();
+					window.location.reload();
+				} else {
+					push(paths.public.home);
+					window.location.reload();
+				}
+			})
+			.catch((error) => {
+				if (isGraphqlMessageError(error)) {
+					setErrorMessage(error.message);
+				}
 			});
-			if (response) await push(paths.public.home);
-			window.location.reload();
-		} catch (error) {
-			console.error(error);
-		}
 	};
 
 	return (
@@ -111,9 +127,9 @@ export const ProfileForm = ({
 
 						<div className="mt-10 mb-5">
 							<Button type="submit">Guardar</Button>
-							{/* {errorMessage && (
-							<p className="mt-5 text-red-400">Error: {errorMessage}</p>
-						)} */}
+							{errorMessage && (
+								<p className="mt-5 text-red-400">{errorMessage}</p>
+							)}
 						</div>
 					</div>
 					<div className="w-2/5 ml-10">
@@ -142,10 +158,19 @@ export const ProfileForm = ({
 									<FormItem>
 										<FormLabel>Email</FormLabel>
 										<FormControl>
-											<Input type="email" {...field} />
+											<Input
+												{...field}
+												onChange={(e) => {
+													field.onChange(e);
+													setEmailChange(true);
+												}}
+											/>
 										</FormControl>
 										<FormDescription>
-											Edita el correo electrónico.
+											<p>Edita el correo electrónico.</p>
+											<p className="text-xs text-red-500">
+												Si cambias el correo electrónico, se cerrará la sesión.
+											</p>
 										</FormDescription>
 										<FormMessage />
 									</FormItem>
