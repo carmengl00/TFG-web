@@ -15,6 +15,7 @@ export function normalizeMe(data?: GetMeQuery) {
 		fullName: startCase(
 			`${data?.me.firstName || ''} ${data?.me.lastName || ''}`
 		),
+		publicName: startCase(data?.me.publicName),
 	};
 }
 

@@ -123,6 +123,7 @@ export type Mutation = {
 	resetPassword: Scalars['Boolean']['output'];
 	/** Updates a resource */
 	updateResource: ResourceType;
+	updateUser: UserType;
 	user: UserType;
 };
 
@@ -182,6 +183,10 @@ export type MutationUpdateResourceArgs = {
 	input: UpdateResourceInput;
 };
 
+export type MutationUpdateUserArgs = {
+	input: ProfileEditInput;
+};
+
 export type MutationUserArgs = {
 	input: ProfileInput;
 };
@@ -207,6 +212,13 @@ export type PaginatedResourceType = {
 export type PaginationInput = {
 	page?: InputMaybe<Scalars['Int']['input']>;
 	pageSize?: InputMaybe<Scalars['Int']['input']>;
+};
+
+export type ProfileEditInput = {
+	email?: InputMaybe<Scalars['String']['input']>;
+	firstName?: InputMaybe<Scalars['String']['input']>;
+	lastName?: InputMaybe<Scalars['String']['input']>;
+	publicName?: InputMaybe<Scalars['String']['input']>;
 };
 
 export type ProfileInput = {
@@ -375,6 +387,19 @@ export type RegisterMutation = {
 		lastName: string;
 		email: string;
 		publicName: string;
+	};
+};
+
+export type UpdateUserMutationVariables = Exact<{
+	input: ProfileEditInput;
+}>;
+
+export type UpdateUserMutation = {
+	updateUser: {
+		email: string;
+		publicName: string;
+		firstName: string;
+		lastName: string;
 	};
 };
 
@@ -756,6 +781,60 @@ export const RegisterDocument = {
 		},
 	],
 } as unknown as DocumentNode<RegisterMutation, RegisterMutationVariables>;
+export const UpdateUserDocument = {
+	kind: 'Document',
+	definitions: [
+		{
+			kind: 'OperationDefinition',
+			operation: 'mutation',
+			name: { kind: 'Name', value: 'updateUser' },
+			variableDefinitions: [
+				{
+					kind: 'VariableDefinition',
+					variable: {
+						kind: 'Variable',
+						name: { kind: 'Name', value: 'input' },
+					},
+					type: {
+						kind: 'NonNullType',
+						type: {
+							kind: 'NamedType',
+							name: { kind: 'Name', value: 'ProfileEditInput' },
+						},
+					},
+				},
+			],
+			selectionSet: {
+				kind: 'SelectionSet',
+				selections: [
+					{
+						kind: 'Field',
+						name: { kind: 'Name', value: 'updateUser' },
+						arguments: [
+							{
+								kind: 'Argument',
+								name: { kind: 'Name', value: 'input' },
+								value: {
+									kind: 'Variable',
+									name: { kind: 'Name', value: 'input' },
+								},
+							},
+						],
+						selectionSet: {
+							kind: 'SelectionSet',
+							selections: [
+								{ kind: 'Field', name: { kind: 'Name', value: 'email' } },
+								{ kind: 'Field', name: { kind: 'Name', value: 'publicName' } },
+								{ kind: 'Field', name: { kind: 'Name', value: 'firstName' } },
+								{ kind: 'Field', name: { kind: 'Name', value: 'lastName' } },
+							],
+						},
+					},
+				],
+			},
+		},
+	],
+} as unknown as DocumentNode<UpdateUserMutation, UpdateUserMutationVariables>;
 export const CreateOrUpdateAvailabilityDocument = {
 	kind: 'Document',
 	definitions: [

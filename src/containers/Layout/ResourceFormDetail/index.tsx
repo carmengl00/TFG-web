@@ -101,7 +101,7 @@ export default function ResourceFormDetail({
 						name="name"
 						render={({ field }) => (
 							<FormItem>
-								<FormLabel>Name</FormLabel>
+								<FormLabel>Nombre</FormLabel>
 								<FormControl>
 									<Input type="name" {...field} />
 								</FormControl>

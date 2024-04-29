@@ -123,6 +123,7 @@ type Mutation {
   Updates a resource
   """
   updateResource(input: UpdateResourceInput!): ResourceType!
+  updateUser(input: ProfileEditInput!): UserType!
   user(input: ProfileInput!): UserType!
 }
 
@@ -147,6 +148,13 @@ type PaginatedResourceType {
 input PaginationInput {
   page: Int
   pageSize: Int
+}
+
+input ProfileEditInput {
+  email: String
+  firstName: String
+  lastName: String
+  publicName: String
 }
 
 input ProfileInput {

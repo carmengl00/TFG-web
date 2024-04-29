@@ -8,4 +8,5 @@ export const paths = {
 	newResource: '/resource/new',
 	editResource: '/resource/[id]/edit',
 	myReservedSlots: '/myReservedSlots',
+	profile: '/profile',
 };
