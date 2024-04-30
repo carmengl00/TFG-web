@@ -36,7 +36,6 @@ const ResourceDetailsReservation = ({
 	showSummary,
 }: ResourceDetailsReservationProps) => {
 	const cardColor = generateRandomColor();
-	console.log(schedule);
 	return (
 		<div className="flex justify-center items-center h-screen">
 			<div

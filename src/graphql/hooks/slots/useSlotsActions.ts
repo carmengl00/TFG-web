@@ -5,6 +5,9 @@ import {
 	DeleteReservedSlotDocument,
 	DeleteReservedSlotMutation,
 	DeleteReservedSlotMutationVariables,
+	SendEmailToReservedSlotUserDocument,
+	SendEmailToReservedSlotUserMutation,
+	SendEmailToReservedSlotUserMutationVariables,
 } from '@/graphql/generated/types';
 import { ApolloError, useMutation } from '@apollo/client';
 import { useCallback } from 'react';
@@ -19,6 +22,11 @@ export function useSlotsActions() {
 		DeleteReservedSlotMutation,
 		DeleteReservedSlotMutationVariables
 	>(DeleteReservedSlotDocument);
+
+	const [performSendEmail] = useMutation<
+		SendEmailToReservedSlotUserMutation,
+		SendEmailToReservedSlotUserMutationVariables
+	>(SendEmailToReservedSlotUserDocument);
 
 	const createReservedSlot = useCallback(
 		async (input: CreateReservedSlotMutationVariables['input']) => {
@@ -50,9 +58,20 @@ export function useSlotsActions() {
 		[performDelete]
 	);
 
+	const sendEmailToReservedSlotUser = useCallback(
+		async (input: SendEmailToReservedSlotUserMutationVariables['input']) => {
+			const raw = await performSendEmail({
+				variables: { input },
+			});
+			return raw.data?.sendEmailToReservedSlotUser;
+		},
+		[performSendEmail]
+	);
+
 	return {
 		createReservedSlot,
 		isCreateLoading,
 		deleteReservedSlot,
+		sendEmailToReservedSlotUser,
 	};
 }

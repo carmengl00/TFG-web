@@ -21,6 +21,20 @@ import { Input } from '../ui/input';
 import { FormSchema } from './constants';
 
 interface ReservationFormProps {
+	resource: {
+		id: string;
+		name: string;
+		description: string;
+		availableTime: number;
+		startDate: string;
+		endDate: string;
+		location?: string | undefined;
+		user: {
+			email: string;
+			firstName: string;
+			lastName: string;
+		};
+	};
 	schedule: Schedule | undefined;
 	resourceId: string;
 	setShowSelectHour: React.Dispatch<React.SetStateAction<boolean>>;
@@ -33,6 +47,7 @@ interface ReservationFormProps {
 }
 
 export const ReservationForm = ({
+	resource,
 	schedule,
 	resourceId,
 	setShowSelectHour,
@@ -41,7 +56,7 @@ export const ReservationForm = ({
 	setShowForm,
 	setDataReservation,
 }: ReservationFormProps) => {
-	const { createReservedSlot } = useSlotsActions();
+	const { createReservedSlot, sendEmailToReservedSlotUser } = useSlotsActions();
 	const form = useForm<z.infer<typeof FormSchema>>({
 		resolver: zodResolver(FormSchema),
 	});
@@ -52,6 +67,22 @@ export const ReservationForm = ({
 				const formattedDay = format(new Date(schedule.day), 'yyyy-MM-dd', {
 					locale: es,
 				});
+				await sendEmailToReservedSlotUser({
+					resourceName: resource.name,
+					resourceDescription: resource.description,
+					email: data.email,
+					name: data.name,
+					description: data.description,
+					adminEmail: resource.user.email,
+					availableTime:
+						resource.availableTime >= 60
+							? `${Math.floor(resource.availableTime / 60)} hora(s)`
+							: `${resource.availableTime} minutos`,
+					endTime: schedule.endTime,
+					location: resource.location ?? '',
+					startTime: schedule.startTime,
+				});
+
 				const response = await createReservedSlot({
 					resourceId: resourceId,
 					name: data.name,
