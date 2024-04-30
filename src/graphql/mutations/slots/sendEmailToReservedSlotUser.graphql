@@ -1,0 +1,6 @@
+mutation sendEmailToReservedSlotUser($input:SendEmailReservationInput!){
+  sendEmailToReservedSlotUser(input:$input){
+    success
+    message
+  }
+}

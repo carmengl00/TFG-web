@@ -47,6 +47,11 @@ type DayAvailabilityType {
   startTime: Time!
 }
 
+type EmailResponse {
+  message: String!
+  success: Boolean!
+}
+
 input GetSlotsInput {
   day: Date!
   resourceId: UUID!
@@ -118,6 +123,16 @@ type Mutation {
   register(input: RegisterInput!): UserType!
   requestResetPassword(input: RequestResetPasswordInput!): Boolean!
   resetPassword(input: ResetPasswordInput!): Boolean!
+
+  """
+  Send an email to advise the user of a reserved slot that the slot has been deleted
+  """
+  sendEmailDeleteSlot(input: SendEmailReservationInput!): EmailResponse!
+
+  """
+  Send an email to the user of a reserved slot
+  """
+  sendEmailToReservedSlotUser(input: SendEmailReservationInput!): EmailResponse!
 
   """
   Updates a resource
@@ -243,6 +258,19 @@ type ResourceType {
   name: String!
   startDate: Date!
   user: UserType!
+}
+
+input SendEmailReservationInput {
+  adminEmail: String!
+  availableTime: String!
+  description: String!
+  email: String!
+  endTime: Time!
+  location: String!
+  name: String!
+  resourceDescription: String!
+  resourceName: String!
+  startTime: Time!
 }
 
 type SlotType {

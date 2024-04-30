@@ -71,6 +71,11 @@ export type DayAvailabilityType = {
 	startTime: Scalars['Time']['output'];
 };
 
+export type EmailResponse = {
+	message: Scalars['String']['output'];
+	success: Scalars['Boolean']['output'];
+};
+
 export type GetSlotsInput = {
 	day: Scalars['Date']['input'];
 	resourceId: Scalars['UUID']['input'];
@@ -121,6 +126,10 @@ export type Mutation = {
 	register: UserType;
 	requestResetPassword: Scalars['Boolean']['output'];
 	resetPassword: Scalars['Boolean']['output'];
+	/** Send an email to advise the user of a reserved slot that the slot has been deleted */
+	sendEmailDeleteSlot: EmailResponse;
+	/** Send an email to the user of a reserved slot */
+	sendEmailToReservedSlotUser: EmailResponse;
 	/** Updates a resource */
 	updateResource: ResourceType;
 	updateUser: UserType;
@@ -177,6 +186,14 @@ export type MutationRequestResetPasswordArgs = {
 
 export type MutationResetPasswordArgs = {
 	input: ResetPasswordInput;
+};
+
+export type MutationSendEmailDeleteSlotArgs = {
+	input: SendEmailReservationInput;
+};
+
+export type MutationSendEmailToReservedSlotUserArgs = {
+	input: SendEmailReservationInput;
 };
 
 export type MutationUpdateResourceArgs = {
@@ -312,6 +329,19 @@ export type ResourceType = {
 	name: Scalars['String']['output'];
 	startDate: Scalars['Date']['output'];
 	user: UserType;
+};
+
+export type SendEmailReservationInput = {
+	adminEmail: Scalars['String']['input'];
+	availableTime: Scalars['String']['input'];
+	description: Scalars['String']['input'];
+	email: Scalars['String']['input'];
+	endTime: Scalars['Time']['input'];
+	location: Scalars['String']['input'];
+	name: Scalars['String']['input'];
+	resourceDescription: Scalars['String']['input'];
+	resourceName: Scalars['String']['input'];
+	startTime: Scalars['Time']['input'];
 };
 
 export type SlotType = {
@@ -505,6 +535,22 @@ export type DeleteReservedSlotMutationVariables = Exact<{
 
 export type DeleteReservedSlotMutation = { deleteReservedSlot: boolean };
 
+export type SendEmailDeleteSlotMutationVariables = Exact<{
+	input: SendEmailReservationInput;
+}>;
+
+export type SendEmailDeleteSlotMutation = {
+	sendEmailDeleteSlot: { success: boolean; message: string };
+};
+
+export type SendEmailToReservedSlotUserMutationVariables = Exact<{
+	input: SendEmailReservationInput;
+}>;
+
+export type SendEmailToReservedSlotUserMutation = {
+	sendEmailToReservedSlotUser: { success: boolean; message: string };
+};
+
 export type MyDailyAvailabilityQueryVariables = Exact<{
 	input: MonthInput;
 }>;
@@ -608,7 +654,13 @@ export type MyReservedSlotsQuery = {
 			email: string;
 			startTime: string;
 			endTime: string;
-			resource: { name: string };
+			resource: {
+				name: string;
+				description: string;
+				availableTime: number;
+				location?: string | undefined;
+				user: { email: string };
+			};
 		}>;
 	};
 };
@@ -1314,6 +1366,116 @@ export const DeleteReservedSlotDocument = {
 	DeleteReservedSlotMutation,
 	DeleteReservedSlotMutationVariables
 >;
+export const SendEmailDeleteSlotDocument = {
+	kind: 'Document',
+	definitions: [
+		{
+			kind: 'OperationDefinition',
+			operation: 'mutation',
+			name: { kind: 'Name', value: 'sendEmailDeleteSlot' },
+			variableDefinitions: [
+				{
+					kind: 'VariableDefinition',
+					variable: {
+						kind: 'Variable',
+						name: { kind: 'Name', value: 'input' },
+					},
+					type: {
+						kind: 'NonNullType',
+						type: {
+							kind: 'NamedType',
+							name: { kind: 'Name', value: 'SendEmailReservationInput' },
+						},
+					},
+				},
+			],
+			selectionSet: {
+				kind: 'SelectionSet',
+				selections: [
+					{
+						kind: 'Field',
+						name: { kind: 'Name', value: 'sendEmailDeleteSlot' },
+						arguments: [
+							{
+								kind: 'Argument',
+								name: { kind: 'Name', value: 'input' },
+								value: {
+									kind: 'Variable',
+									name: { kind: 'Name', value: 'input' },
+								},
+							},
+						],
+						selectionSet: {
+							kind: 'SelectionSet',
+							selections: [
+								{ kind: 'Field', name: { kind: 'Name', value: 'success' } },
+								{ kind: 'Field', name: { kind: 'Name', value: 'message' } },
+							],
+						},
+					},
+				],
+			},
+		},
+	],
+} as unknown as DocumentNode<
+	SendEmailDeleteSlotMutation,
+	SendEmailDeleteSlotMutationVariables
+>;
+export const SendEmailToReservedSlotUserDocument = {
+	kind: 'Document',
+	definitions: [
+		{
+			kind: 'OperationDefinition',
+			operation: 'mutation',
+			name: { kind: 'Name', value: 'sendEmailToReservedSlotUser' },
+			variableDefinitions: [
+				{
+					kind: 'VariableDefinition',
+					variable: {
+						kind: 'Variable',
+						name: { kind: 'Name', value: 'input' },
+					},
+					type: {
+						kind: 'NonNullType',
+						type: {
+							kind: 'NamedType',
+							name: { kind: 'Name', value: 'SendEmailReservationInput' },
+						},
+					},
+				},
+			],
+			selectionSet: {
+				kind: 'SelectionSet',
+				selections: [
+					{
+						kind: 'Field',
+						name: { kind: 'Name', value: 'sendEmailToReservedSlotUser' },
+						arguments: [
+							{
+								kind: 'Argument',
+								name: { kind: 'Name', value: 'input' },
+								value: {
+									kind: 'Variable',
+									name: { kind: 'Name', value: 'input' },
+								},
+							},
+						],
+						selectionSet: {
+							kind: 'SelectionSet',
+							selections: [
+								{ kind: 'Field', name: { kind: 'Name', value: 'success' } },
+								{ kind: 'Field', name: { kind: 'Name', value: 'message' } },
+							],
+						},
+					},
+				],
+			},
+		},
+	],
+} as unknown as DocumentNode<
+	SendEmailToReservedSlotUserMutation,
+	SendEmailToReservedSlotUserMutationVariables
+>;
 export const MyDailyAvailabilityDocument = {
 	kind: 'Document',
 	definitions: [
@@ -1790,7 +1952,32 @@ export const MyReservedSlotsDocument = {
 													selections: [
 														{
 															kind: 'Field',
+															name: { kind: 'Name', value: 'user' },
+															selectionSet: {
+																kind: 'SelectionSet',
+																selections: [
+																	{
+																		kind: 'Field',
+																		name: { kind: 'Name', value: 'email' },
+																	},
+																],
+															},
+														},
+														{
+															kind: 'Field',
 															name: { kind: 'Name', value: 'name' },
+														},
+														{
+															kind: 'Field',
+															name: { kind: 'Name', value: 'description' },
+														},
+														{
+															kind: 'Field',
+															name: { kind: 'Name', value: 'availableTime' },
+														},
+														{
+															kind: 'Field',
+															name: { kind: 'Name', value: 'location' },
 														},
 													],
 												},

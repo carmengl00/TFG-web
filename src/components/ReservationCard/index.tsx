@@ -11,25 +11,56 @@ import {
 
 interface ReservationCardProps {
 	resourceName: string;
+	resourceDescription: string;
+	adminEmail: string;
+	availableTime: string;
 	id: string;
 	name: string;
 	email: string;
 	startTime: string;
 	endTime: string;
+	location: string | undefined;
 }
 
 const ReservationCard = ({
 	resourceName,
+	resourceDescription,
+	adminEmail,
+	availableTime,
 	id,
 	name,
 	email,
 	startTime,
 	endTime,
+	location,
 }: ReservationCardProps) => {
 	const currentDate = new Date();
 	const startDate = new Date(startTime);
 
-	const { deleteReservedSlot } = useSlotsActions();
+	const { deleteReservedSlot, sendEmailDeleteSlot } = useSlotsActions();
+
+	const handleClick = async () => {
+		const formattedStartTime = startTime.substring(11, 16);
+		const formattedEndTime = endTime.substring(11, 16);
+		try {
+			await sendEmailDeleteSlot({
+				resourceName: resourceName,
+				email: email,
+				startTime: formattedStartTime,
+				endTime: formattedEndTime,
+				name: name,
+				resourceDescription: resourceDescription,
+				adminEmail: adminEmail,
+				availableTime: availableTime,
+				description: resourceDescription,
+				location: location || '',
+			});
+			deleteReservedSlot(id);
+		} catch (e) {
+			console.error(e);
+		}
+	};
+
 	return (
 		<div className="mt-10">
 			<Card className="w-11/12 ml-5">
@@ -50,7 +81,11 @@ const ReservationCard = ({
 						</CardDescription>
 					</div>
 					<div className="flex items-center space-x-1 text-secondary-foreground">
-						<Trash2Icon onClick={() => deleteReservedSlot(id)} />
+						<Trash2Icon
+							onClick={() => {
+								handleClick();
+							}}
+						/>
 					</div>
 				</CardHeader>
 				<CardContent>

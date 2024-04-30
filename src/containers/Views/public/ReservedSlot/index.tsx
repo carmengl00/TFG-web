@@ -51,6 +51,7 @@ export function ReservedSlotView() {
 						)}
 						{showForm && (
 							<ReservationForm
+								resource={resource}
 								schedule={schedule}
 								resourceId={resource.id}
 								setShowSelectHour={setShowSelectHour}

@@ -13,7 +13,13 @@ query myReservedSlots(
     }
     edges{
       resource{
+        user{
+          email
+        }
         name
+        description
+        availableTime
+        location
       }
       id
       name
