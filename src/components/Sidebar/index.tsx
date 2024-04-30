@@ -77,8 +77,8 @@ const Menu = ({ resourcesNumber, reservedSlotsNumber }: MenuProps) => {
 						{
 							title: 'Ayuda',
 							icon: HelpCircle,
-							variant: getLinkVariant(paths.public.home),
-							href: paths.public.home,
+							variant: getLinkVariant(paths.public.signIn),
+							href: 'mailto:cargallop2@alum.us.es?Subject=Ayuda',
 						},
 					]}
 				/>
