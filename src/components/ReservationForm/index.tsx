@@ -76,8 +76,8 @@ export const ReservationForm = ({
 					adminEmail: resource.user.email,
 					availableTime:
 						resource.availableTime >= 60
-							? `${Math.floor(resource.availableTime / 60)} hora(s)`
-							: `${resource.availableTime} minutos`,
+							? `${String(resource.availableTime / 60)} hora(s)`
+							: String(resource.availableTime),
 					endTime: schedule.endTime,
 					location: resource.location ?? '',
 					startTime: schedule.startTime,

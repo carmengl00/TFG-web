@@ -8,6 +8,10 @@ import { useConnect } from './connect';
 export function MyReservedSlotsView() {
 	const { resources, reservedSlots, loadMore } = useConnect();
 
+	const formatAvailableTime = (time: number) => {
+		return time >= 60 ? `${Math.floor(time / 60)} hora(s)` : `${time} minutos`;
+	};
+
 	return (
 		<>
 			<div className="flex flex-row w-full h-full">
@@ -32,8 +36,14 @@ export function MyReservedSlotsView() {
 							name={reservedSlot.name}
 							email={reservedSlot.email}
 							resourceName={reservedSlot.resource.name}
+							resourceDescription={reservedSlot.resource.description}
+							adminEmail={reservedSlot.resource.user.email}
+							availableTime={formatAvailableTime(
+								reservedSlot.resource.availableTime
+							)}
 							startTime={reservedSlot.startTime}
 							endTime={reservedSlot.endTime}
+							location={reservedSlot.resource.location}
 						/>
 					))}
 					<Button onClick={loadMore} className="ml-5 mt-5">

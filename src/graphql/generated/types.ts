@@ -535,6 +535,14 @@ export type DeleteReservedSlotMutationVariables = Exact<{
 
 export type DeleteReservedSlotMutation = { deleteReservedSlot: boolean };
 
+export type SendEmailDeleteSlotMutationVariables = Exact<{
+	input: SendEmailReservationInput;
+}>;
+
+export type SendEmailDeleteSlotMutation = {
+	sendEmailDeleteSlot: { success: boolean; message: string };
+};
+
 export type SendEmailToReservedSlotUserMutationVariables = Exact<{
 	input: SendEmailReservationInput;
 }>;
@@ -646,7 +654,13 @@ export type MyReservedSlotsQuery = {
 			email: string;
 			startTime: string;
 			endTime: string;
-			resource: { name: string };
+			resource: {
+				name: string;
+				description: string;
+				availableTime: number;
+				location?: string | undefined;
+				user: { email: string };
+			};
 		}>;
 	};
 };
@@ -1352,6 +1366,61 @@ export const DeleteReservedSlotDocument = {
 	DeleteReservedSlotMutation,
 	DeleteReservedSlotMutationVariables
 >;
+export const SendEmailDeleteSlotDocument = {
+	kind: 'Document',
+	definitions: [
+		{
+			kind: 'OperationDefinition',
+			operation: 'mutation',
+			name: { kind: 'Name', value: 'sendEmailDeleteSlot' },
+			variableDefinitions: [
+				{
+					kind: 'VariableDefinition',
+					variable: {
+						kind: 'Variable',
+						name: { kind: 'Name', value: 'input' },
+					},
+					type: {
+						kind: 'NonNullType',
+						type: {
+							kind: 'NamedType',
+							name: { kind: 'Name', value: 'SendEmailReservationInput' },
+						},
+					},
+				},
+			],
+			selectionSet: {
+				kind: 'SelectionSet',
+				selections: [
+					{
+						kind: 'Field',
+						name: { kind: 'Name', value: 'sendEmailDeleteSlot' },
+						arguments: [
+							{
+								kind: 'Argument',
+								name: { kind: 'Name', value: 'input' },
+								value: {
+									kind: 'Variable',
+									name: { kind: 'Name', value: 'input' },
+								},
+							},
+						],
+						selectionSet: {
+							kind: 'SelectionSet',
+							selections: [
+								{ kind: 'Field', name: { kind: 'Name', value: 'success' } },
+								{ kind: 'Field', name: { kind: 'Name', value: 'message' } },
+							],
+						},
+					},
+				],
+			},
+		},
+	],
+} as unknown as DocumentNode<
+	SendEmailDeleteSlotMutation,
+	SendEmailDeleteSlotMutationVariables
+>;
 export const SendEmailToReservedSlotUserDocument = {
 	kind: 'Document',
 	definitions: [
@@ -1883,7 +1952,32 @@ export const MyReservedSlotsDocument = {
 													selections: [
 														{
 															kind: 'Field',
+															name: { kind: 'Name', value: 'user' },
+															selectionSet: {
+																kind: 'SelectionSet',
+																selections: [
+																	{
+																		kind: 'Field',
+																		name: { kind: 'Name', value: 'email' },
+																	},
+																],
+															},
+														},
+														{
+															kind: 'Field',
 															name: { kind: 'Name', value: 'name' },
+														},
+														{
+															kind: 'Field',
+															name: { kind: 'Name', value: 'description' },
+														},
+														{
+															kind: 'Field',
+															name: { kind: 'Name', value: 'availableTime' },
+														},
+														{
+															kind: 'Field',
+															name: { kind: 'Name', value: 'location' },
 														},
 													],
 												},

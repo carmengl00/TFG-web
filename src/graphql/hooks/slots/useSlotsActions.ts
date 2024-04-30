@@ -5,6 +5,9 @@ import {
 	DeleteReservedSlotDocument,
 	DeleteReservedSlotMutation,
 	DeleteReservedSlotMutationVariables,
+	SendEmailDeleteSlotDocument,
+	SendEmailDeleteSlotMutation,
+	SendEmailDeleteSlotMutationVariables,
 	SendEmailToReservedSlotUserDocument,
 	SendEmailToReservedSlotUserMutation,
 	SendEmailToReservedSlotUserMutationVariables,
@@ -27,6 +30,11 @@ export function useSlotsActions() {
 		SendEmailToReservedSlotUserMutation,
 		SendEmailToReservedSlotUserMutationVariables
 	>(SendEmailToReservedSlotUserDocument);
+
+	const [performSendEmailDeletedSlot] = useMutation<
+		SendEmailDeleteSlotMutation,
+		SendEmailDeleteSlotMutationVariables
+	>(SendEmailDeleteSlotDocument);
 
 	const createReservedSlot = useCallback(
 		async (input: CreateReservedSlotMutationVariables['input']) => {
@@ -68,10 +76,21 @@ export function useSlotsActions() {
 		[performSendEmail]
 	);
 
+	const sendEmailDeleteSlot = useCallback(
+		async (input: SendEmailDeleteSlotMutationVariables['input']) => {
+			const raw = await performSendEmailDeletedSlot({
+				variables: { input },
+			});
+			return raw.data?.sendEmailDeleteSlot;
+		},
+		[performSendEmailDeletedSlot]
+	);
+
 	return {
 		createReservedSlot,
 		isCreateLoading,
 		deleteReservedSlot,
 		sendEmailToReservedSlotUser,
+		sendEmailDeleteSlot,
 	};
 }

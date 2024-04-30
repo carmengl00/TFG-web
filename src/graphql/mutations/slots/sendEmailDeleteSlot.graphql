@@ -1,0 +1,6 @@
+mutation sendEmailDeleteSlot($input:SendEmailReservationInput!){
+  sendEmailDeleteSlot(input:$input){
+    success
+    message
+  }
+}
